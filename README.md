@@ -1,2 +1,2 @@
-# webapp-grunt-html
-HTML scaffolding template with grunt integration for unit and functiona test, build and deploy, development server.
+# torrent-rex-extension
+Chrome extension for T-Rex.
