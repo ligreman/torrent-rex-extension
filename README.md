@@ -1,2 +1,2 @@
-# torrent-rex-extension
-The byte predator, feared all around the Chrome universe.
+# webapp-grunt-html
+HTML scaffolding template with grunt integration for unit and functiona test, build and deploy, development server.

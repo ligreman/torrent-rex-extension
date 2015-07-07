@@ -1,0 +1,22 @@
+<md-dialog>
+    <md-dialog-content>
+        <h2>Torrents en cola de descarga</h2>
+
+        <ul>
+            <li ng-repeat="torrent in downloads">
+                <p>
+                    {{torrent.title}} ({{torrent.retry}} intentos)
+                </p>
+            </li>
+        </ul>
+
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <md-button ng-click="downloadTorrents()"
+                   class="md-primary md-button md-raised" aria-label=""
+                   title="Se intentará descargar los torrents dentro de 1 minuto">
+            Descargar estos torrents
+        </md-button>
+        <md-button aria-label="" ng-click="hide()">Cerrar</md-button>
+    </div>
+</md-dialog>

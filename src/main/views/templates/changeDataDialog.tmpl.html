@@ -1,0 +1,33 @@
+<md-dialog>
+    <md-dialog-content>
+        <h2>Cambiar datos de la serie</h2>
+
+        <form name="fromForm">
+            <md-input-container flex>
+                <label>Descargar desde la temporada</label>
+                <input type="number" min="1" name="fromSeason" ng-model="fromSeason" required>
+                <span class="error" ng-show="fromForm.fromSeason.$error.required">Introduce la temporada</span>
+                <span class="error" ng-show="fromForm.fromSeason.$error.min">Ha de ser un número mayor que 0</span>
+                <span class="error" ng-show="fromForm.fromSeason.$error.number">Debe ser un número</span>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Desde el episodio</label>
+                <input type="number" min="0" name="fromChapter" ng-model="fromChapter" required>
+                <span class="error" ng-show="fromForm.fromChapter.$error.required">Introduce el episodio</span>
+                <span class="error" ng-show="fromForm.fromChapter.$error.min">Ha de ser un número mayor que 0</span>
+                <span class="error" ng-show="fromForm.fromChapter.$error.number">Debe ser un número</span>
+            </md-input-container>
+        </form>
+
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <md-button class="md-accent md-button md-raised" aria-label="" ng-disabled="!fromForm.$valid"
+                   ng-click="ok({fromTemporada:fromSeason, fromEpisodio:fromChapter})">
+            Guardar cambios
+        </md-button>
+        <md-button aria-label="" ng-click="hide()">
+            Cerrar
+        </md-button>
+    </div>
+</md-dialog>

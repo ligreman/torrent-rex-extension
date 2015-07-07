@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app="TorrentRex" ng-csp>
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <p>Puedes exportar o importar tu historial de descargas para no perderlo si desinstalas la aplicación.</p>
+
+    <p id="exportar"><a id="linkExportar" download="" href="">Exportar series en descarga</a></p>
+
+    <p>Para importar un backup carga el fichero TRex a continuación:</p>
+
+    <input type="file" id="aImportar" name="files[]" accept="text/plain" />
+    <p style="color:red" id="importError"></p>
+    <p style="color:green" id="importOK"></p>
+
+    <script src="js/tv4.min.js"></script>
+    <script src="js/options.js"></script>
+</body>
+</html>

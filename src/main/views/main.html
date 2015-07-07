@@ -1,0 +1,85 @@
+<div layout="column" layout-fill>
+
+   
+
+	<md-toolbar class="fixed">
+      <div class="md-toolbar-tools">
+        <h2 flex="65">
+                <span class="negrita"><img src="images/white.png"
+                                           style="vertical-align: text-bottom; width: 30px; cursor:pointer"
+                                           ng-click="about($event)" /> Series en descarga</span>
+            </h2>
+
+            <md-switch ng-model="trexStatus" name="trexStatus" ng-change="changeTrexStatus()"
+                       class="md-accent right" flex="20">
+                {{trexStatus?'Activo':'Inactivo'}}
+                <md-tooltip> Activar/Desactivar TRex</md-tooltip>
+            </md-switch>
+            <a ng-href="{{opcionesLink}}" class="right iconC" flex="10">
+                <img src="images/rueda.png" style="width: 24px; height: 24px;" />
+                <md-tooltip> Configuración</md-tooltip>
+            </a>
+      </div>
+    </md-toolbar>
+
+
+    <md-content id="main" class="header-spacing footer-spacing">
+        <h3 class="center" ng-show="series.length == 0">Añade series para su descarga automática.</h3>
+        <md-card ng-repeat="serie in series track by serie.title">
+            <div layout="row" ng-class="(serie.active)?'serie-enabled':'serie-disabled'">
+                <div flex="75">
+                    <h3>
+                        <md-button class="minimal" aria-label="" ng-click="goToSerie(serie.url, serie.title, 'main')">
+                            {{serie.title}}
+                        </md-button>
+                    </h3>
+                </div>
+                <md-switch ng-model="serie.active" name="serie.active" ng-change="updateSeries()"
+                           class="md-accent right" aria-label="" flex>
+                    {{serie.active?'Activo':'Inactivo'}}
+                    <md-tooltip>
+                        Activar/Desactivar serie
+                    </md-tooltip>
+                </md-switch>
+            </div>
+            <md-card-content ng-init="cuantos = countExcluded(serie.excluded)">
+                <div layout="row" layout-align="start center">
+                    <div flex="85">
+                        <p>Último capítulo descargado: <span class="enlace" ng-click="showChangeData($event, serie)">Temporada {{serie.lastSeason}} - Capítulo
+                            {{serie.lastChapter}}</span></p>
+
+                        <p ng-show="cuantos>0" class="enlace"
+                           ng-click="showExclusions($event, serie.title)">Exclusiones: {{cuantos}}</p>
+                    </div>
+                    <md-button class="md-primary no-min-width" ng-click="removeSerie($event, serie.title)" aria-label="" flex>
+                        <md-icon md-svg-icon="images/ic_clear_black_24px.svg"></md-icon>
+                    </md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </md-content>
+
+    <md-toolbar class="fixed bottom-right botonera">
+        <!--<div class="md-toolbar-tools md-toolbar-tools-bottom">-->
+        <div layout="row" layout-align="space-around center" class="blanco">
+            <md-button class="md-primary md-fab" ng-click="goto('torrents')"
+                       aria-label="" title="Buscar torrent">
+                <md-icon md-svg-icon="images/ic_search_white_24px.svg"></md-icon>
+            </md-button>
+            <div layour="row">
+                <p class="black md-whiteframe-z1 last-check" ng-hide="lastCheck == ''">Última comprobación:
+                    {{lastCheck}}</p>
+                <button class="md-button md-primary md-default-theme" ng-show="downloadingTorrents.length>0"
+                        ng-click="showDownloadPile($event)">
+                    <strong>Descargas en cola: {{downloadingTorrents.length}} </strong>
+                </button>
+            </div>
+            <md-button class="md-primary md-medium-tall md-fab" ng-click="goto('series')"
+                       aria-label="" title="Añadir serie">
+                <md-icon md-svg-icon="images/ic_add_white_24px.svg"></md-icon>
+            </md-button>
+
+        </div>
+        <!--</div>-->
+    </md-toolbar>
+</div>

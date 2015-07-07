@@ -1,0 +1,80 @@
+<div layout="column" layout-fill>
+
+    <md-toolbar class="fixed custom">
+        <div layout="row">
+            <md-button ng-show="source=='series'" ng-click="goto('series')" aria-label="" class="no-min-width">
+                <md-icon md-svg-icon="images/ic_navigate_before_white_24px.svg"></md-icon>
+            </md-button>
+            <md-button ng-show="source=='main'" ng-click="goto('main')" aria-label="" class="no-min-width">
+                <md-icon md-svg-icon="images/ic_navigate_before_white_24px.svg"></md-icon>
+            </md-button>
+            <h2 class="md-toolbar-tools">
+                <span class="negrita">Episodios de {{title}}</span>
+            </h2>
+        </div>
+    </md-toolbar>
+
+    <md-content class="overflowed-list header-spacing">
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-show="loading">
+            <md-progress-circular class="md-primary center" md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+        <div ng-hide="loading">
+            <div class="row metainfo">
+                <h1>{{title}}</h1>
+                <p>Idioma: {{info.language}}</p>
+                <p>Última emisión: Temporada {{info.lastSeason}} - Capítulo {{info.lastChapter}}</p>
+            </div>
+
+            <div class="center" ng-hide="info.lastSeason == 0">
+                <md-button class="md-raised md-primary" ng-click="showAdd($event)" aria-label="">
+                    Añadir serie a descargas
+                </md-button>
+                <!--<md-button class="md-raised md-primary" ng-click="deleteStorage()">Borrar storage</md-button>-->
+            </div>
+
+            <br />
+
+            <div ng-repeat="temporada in info.seasons">
+                <div layout="row">
+                    <h2 class="metainfo" flex>{{temporada.title}}</h2>
+                    <p class="metainfo right ptop10" flex>Último capítulo emitido: {{temporada.lastChapter}}</p>
+                </div>
+
+                <md-card ng-repeat="capi in temporada.chapters">
+                    <div class="destacado center">
+                        <h3>{{capi.title}}</h3>
+                    </div>
+                    <md-card-content>
+                        <div layout="row">
+                            <div flex>Idioma: {{capi.languageTitle}}</div>
+                            <div flex>Tamaño: {{capi.size}} [{{capi.format}}]</div>
+                        </div>
+                        <p class="right">
+                            <md-button class="md-warn" ng-hide="isExcluded(capi.id)"
+                                       ng-click="excludeTorrent(capi.id, capi.title, $event)" aria-label="">
+                                Excluir
+                                <md-tooltip>
+                                    Por si no pertenece a la serie
+                                </md-tooltip>
+                            </md-button>
+                            <md-button class="md-accent" ng-show="isExcluded(capi.id)"
+                                       ng-click="desExcludeTorrent(capi.id)" aria-label="">
+                                Incluir
+                                <md-tooltip>
+                                    Volver a incluir el episodio
+                                </md-tooltip>
+                            </md-button>
+                            <md-button ng-click="download(capi.id)" aria-label="">Torrent</md-button>
+                            <md-button class="md-primary" aria-label=""
+                                       ng-click="addDirectly({fromTemporada:temporada.season, fromEpisodio:capi.chapter})">
+                                Añadir empezando aquí
+                            </md-button>
+                        </p>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+    </md-content>
+
+</div>

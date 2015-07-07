@@ -1,0 +1,21 @@
+<md-dialog>
+    <md-dialog-content>
+        <h2>Episodios excluidos</h2>
+
+        <ul>
+            <li ng-repeat="exclusion in exclusions">
+                <p>
+                    {{exclusion.title}}
+                    <md-button ng-click="incluir(exclusion.torrentId)" class="md-accent" aria-label="">Volver a incluir
+                    </md-button>
+                </p>
+            </li>
+        </ul>
+
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <md-button aria-label="" ng-click="ok()">
+            Cerrar
+        </md-button>
+    </div>
+</md-dialog>

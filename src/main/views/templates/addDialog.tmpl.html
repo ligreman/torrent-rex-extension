@@ -1,0 +1,41 @@
+<md-dialog>
+    <md-dialog-content>
+        <h2>Añadir serie a descargas automáticas</h2>
+
+        <p>Elige la temporada y episodio desde el que empezar a descargar. Se comenzará la descarga automática de la
+            serie incluyendo el episodio que indiques aquí.</p>
+
+        <form name="fromForm">
+            <md-input-container flex>
+                <label>Descargar desde la temporada</label>
+                <input type="number" min="{{seasonLimits.min}}" max="{{seasonLimits.max}}" name="fromSeason"
+                       ng-model="fromSeason" required>
+                <span class="error" ng-show="fromForm.fromSeason.$error.required">Introduce la temporada</span>
+                <span class="error" ng-show="fromForm.fromSeason.$error.min">Ha de ser un número mayor que 0</span>
+                <span class="error" ng-show="fromForm.fromSeason.$error.max">Esa temporada no existe aún</span>
+                <span class="error" ng-show="fromForm.fromSeason.$error.number">Debe ser un número</span>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Desde el episodio</label>
+                <input type="number" min="{{chapterLimits.min}}"
+                       name="fromChapter" ng-model="fromChapter" required>
+                <span class="error" ng-show="fromForm.fromChapter.$error.required">Introduce el episodio</span>
+                <span class="error" ng-show="fromForm.fromChapter.$error.min">Ha de ser un número mayor que 0</span>
+                <span class="error" ng-show="fromForm.fromChapter.$error.number">Debe ser un número</span>
+            </md-input-container>
+        </form>
+
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <md-button aria-label="" ng-click="cancel()">
+            Cancelar
+        </md-button>
+        <md-button ng-disabled="!fromForm.$valid"
+                   ng-click="answer({fromTemporada:fromSeason, fromEpisodio:fromChapter})"
+                   aria-label=""
+                   class="md-primary">
+            Añadir
+        </md-button>
+    </div>
+</md-dialog>

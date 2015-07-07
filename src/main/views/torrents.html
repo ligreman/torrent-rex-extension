@@ -1,0 +1,80 @@
+<div layout="column" layout-fill>
+
+    <md-toolbar class="fixed custom">
+        <div layout="row">
+            <md-button ng-click="goto('main')" aria-label="" class="no-min-width">
+                <md-icon md-svg-icon="images/ic_navigate_before_white_24px.svg"></md-icon>
+            </md-button>
+            <h2 class="md-toolbar-tools">
+                <span class="negrita">Búsqueda de torrents</span>
+            </h2>
+        </div>
+    </md-toolbar>
+
+    <md-content class="overflowed-list header-spacing lrpad10">
+        <form name="searchForm" layout="row">
+            <md-input-container flex="75">
+                <label>Búsqueda</label>
+                <input type="text" name="searchTerm" ng-model="searchTerm" required>
+            </md-input-container>
+            <md-button class="md-primary md-button" ng-click="search(searchTerm, 1)"
+                       ng-disabled="searchForm.searchTerm.$error.required"
+                       aria-label="" flex> Buscar
+            </md-button>
+        </form>
+
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-show="loading">
+            <md-progress-circular class="md-primary center" md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+        <!-- Paginación -->
+        <div ng-hide="maxPages <= 0" layout="row">
+            <md-button class="md-button" ng-click="search(searchTerm, currentPage-1)"
+                       ng-disabled="currentPage <= 1"
+                       aria-label="" flex> Anterior
+            </md-button>
+            <p class="center" flex> {{currentPage}} de {{maxPages}} páginas </p>
+            <md-button class="md-button" ng-click="search(searchTerm, currentPage+1)"
+                       ng-disabled="currentPage >= maxPages"
+                       aria-label="" flex> Siguiente
+            </md-button>
+        </div>
+
+        <section ng-hide="loading || (!loading && currentPage==0)">
+            <md-card ng-repeat="torrent in torrents">
+                <div class="destacado">
+                    <h3>{{torrent.title}}</h3>
+                </div>
+                <md-card-content>
+                    <div layout="row">
+                        <div flex>Idioma: {{torrent.language}}</div>
+                        <div flex>Tamaño: {{torrent.size}}</div>
+                    </div>
+
+                    <div layout="row" layout-align="space-between">
+                        <p><em>{{torrent.category}}</em></p>
+                        <md-button class="md-primary" ng-click="download(torrent.id)" aria-label="">
+                            Torrent
+                        </md-button>
+                    </div>
+                </md-card-content>
+            </md-card>
+
+            <p ng-show="torrents.length == 0">No se encontraron torrents</p>
+        </section>
+
+        <!-- Paginación -->
+        <div ng-hide="maxPages <= 0" layout="row">
+            <md-button class="md-button" ng-click="search(searchTerm, currentPage-1)"
+                       ng-disabled="currentPage <= 1"
+                       aria-label="" flex> Anterior
+            </md-button>
+            <p class="center" flex> {{currentPage}} de {{maxPages}} páginas </p>
+            <md-button class="md-button" ng-click="search(searchTerm, currentPage+1)"
+                       ng-disabled="currentPage >= maxPages"
+                       aria-label="" flex> Siguiente
+            </md-button>
+        </div>
+    </md-content>
+
+</div>
