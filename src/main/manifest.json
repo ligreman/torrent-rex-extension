@@ -16,7 +16,9 @@
         "default_title": "T-Rex"
     },
     "background": {
-        "scripts": ["js/events.js"],
+        "scripts": [
+            "js/events.js"
+        ],
         "persistent": true
     },
     "options_ui": {
@@ -29,6 +31,6 @@
         "storage",
         "alarms",
         "notifications",
-        "http://trex-lovehinaesp.rhcloud.com/api/tx/*"
+        "http://trex-lovehinaesp.rhcloud.com/api/trex/*"
     ]
 }

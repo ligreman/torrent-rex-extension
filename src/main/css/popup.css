@@ -13,7 +13,8 @@ ng\:form {
 }
 
 body {
-    font-family: Helvetica, sans-serif;
+    font-family: Roboto, Helvetica, sans-serif;
+    font-size: 0.9em;
 }
 
 html p, body p {
@@ -23,8 +24,8 @@ html p, body p {
 #popup {
     min-width: 500px;
     width: 500px;
-    min-height: 10px;
-    height: 400px;
+    min-height: 550px;
+    height: 550px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -50,8 +51,8 @@ html p, body p {
 .enlace {
     cursor: pointer;
     color: #304FFE;
-	display: inline-block;
-	margin-top: 0;
+    display: inline-block;
+    margin-top: 5px;
 }
 
 .ptop10 {
@@ -87,7 +88,7 @@ html p, body p {
 .overflowed-list {
     overflow: hidden;
     overflow-y: scroll;
-    height: 600px;
+    height: 532px;
     position: relative;
 }
 
@@ -108,16 +109,13 @@ html p, body p {
     right: 0 !important;
 }
 
-.item-hover {
-    cursor: pointer;
-    background-color: #E8EAF6;
-    -webkit-transition: all 0.2s;
-    transition: all 0.2s;
+#pestanas md-list-item {
+    background-color: #F5F5F5;
 }
 
-.item-no-hover {
-    cursor: default;
-    background-color: transparent;
+#pestanas md-list-item:hover {
+    cursor: pointer;
+    background-color: #E8EAF6;
     -webkit-transition: all 0.2s;
     transition: all 0.2s;
 }
@@ -196,14 +194,14 @@ md-dialog p {
 
 .md-button.minimal {
     padding: 0;
-	margin: 0;
-	line-height: 30px;
-	min-height: 30px;
+    margin: 0;
+    line-height: 30px;
+    min-height: 30px;
     font-weight: bold;
 }
 
 .md-button.no-min-width {
-	min-width: initial;
+    min-width: initial;
 }
 
 md-backdrop.md-opaque.md-default-theme, .md-dialog-container {
@@ -240,3 +238,9 @@ md-backdrop.md-opaque.md-default-theme, .md-dialog-container {
     margin-top: 7px;
     padding-right: 5px;
 }
+
+.small-buttons button {
+    font-size: 12px;
+    margin-bottom: 0;
+}
+

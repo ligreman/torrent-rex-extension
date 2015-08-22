@@ -1,8 +1,18 @@
+"use strict";
+
 var appServices = angular.module('appServices', []);
 
 appServices.service('paramService', function () {
-    var url = '', title = '', source = '', exclusionInfo, category = '',
-        seasonLimits = {}, chapterLimits = {};
+    var id = '', url = '', title = '', source = '', exclusionInfo, category = '',
+        seasonLimits = {}, chapterLimits = {}, lastPage = '';
+
+    var setId = function (newId) {
+        id = newId
+    };
+
+    var getId = function () {
+        return id;
+    };
 
     var setUrl = function (newUrl) {
         url = newUrl
@@ -29,6 +39,14 @@ appServices.service('paramService', function () {
 
     var getSeasonLimits = function () {
         return seasonLimits;
+    };
+
+    var setLastPage = function (lastP) {
+        lastPage = lastP;
+    };
+
+    var getLastPage = function () {
+        return lastPage;
     };
 
     var setChapterLimits = function (min, max) {
@@ -67,8 +85,12 @@ appServices.service('paramService', function () {
     };
 
     return {
+        setId: setId,
+        getId: getId,
         setUrl: setUrl,
         getUrl: getUrl,
+        getLastPage: getLastPage,
+        setLastPage: setLastPage,
         setTitle: setTitle,
         getTitle: getTitle,
         setSeasonLimits: setSeasonLimits,
@@ -86,12 +108,14 @@ appServices.service('paramService', function () {
 });
 
 appServices.service('torrentService', function () {
-    var processTorrents = function processTorrents(listaTorrents) {
-        var torrent, metadata, aux, ultimaTemporada = 0, temporadas = [], temporadaUltimoCapitulo = [],
-            temps = [], chaps = [], idiomaGeneral = '';
+    var processTorrents = function processTorrents(data) {
+        var seasonChapters, metadata, aux,
+            ultimaTemporada = 0, temporadas = [],
+            temps = [], chaps = [], idiomaGeneral = '',
+            listaTorrents = data.torrents;
 
         //Saco los excluidos
-        var seriesActuales = JSON.parse(localStorage.getItem('series')), excluded = [];
+        var seriesActuales = JSON.parse(localStorage.getItem('series')), excluded = []; //TODO excluidos
         if (seriesActuales !== undefined && seriesActuales !== null && seriesActuales.length > 0) {
             //Busco la serie
             for (var i = 0; i < seriesActuales.length; i++) {
@@ -103,79 +127,59 @@ appServices.service('torrentService', function () {
             }
         }
 
-        //Recorro los torrents y voy extrayendo su metainformaci?n
-        for (var key2 in listaTorrents) {
-            if (listaTorrents.hasOwnProperty(key2)) {
-                torrent = listaTorrents[key2];
+        //Los metadatos de la serie
+        metadata = data.metadata;
 
-                //Miro a ver si est? excluido
-                if (excluded.indexOf(torrent.id) !== -1) {
-                    continue;
-                }
+        //Recorro los torrents y voy extrayendo su metainformación
+        for (var season in listaTorrents) {
+            if (listaTorrents.hasOwnProperty(season)) {
+                seasonChapters = listaTorrents[season];
 
-                metadata = extractMetaInfo(torrent.title);
+                seasonChapters.forEach(function (chapter) {
+                    //Miro a ver si está excluido
+                    if (excluded.indexOf(chapter.id) === -1) {
+                        //Genero la lista de capítulos de esta temporada
+                        if (temporadas[season] === undefined) {
+                            temporadas[season] = [];
+                        }
 
-                if (metadata !== null) {
+                        temporadas[season][chapter.chapter] = {
+                            title: chapter.title,
+                            id: chapter.id,
+                            chapter: chapter.chapter,
+                            language: chapter.language,
+                            size: chapter.size,
+                            format: chapter.format
+                        };
 
-                    //categoria
-                    aux = torrent.category.split(' > ');
-
-                    if (temporadas[metadata.temporada] === undefined) {
-                        temporadas[metadata.temporada] = [];
+                        //Idioma general
+                        if (idiomaGeneral === '') {
+                            idiomaGeneral = chapter.language;
+                        }
                     }
-
-                    temporadas[metadata.temporada][metadata.capitulo] = {
-                        title: torrent.title,
-                        id: torrent.id,
-                        chapter: metadata.capitulo,
-                        language: torrent.language,
-                        languageTitle: metadata.idioma,
-                        //category: aux[0],
-                        size: torrent.size,
-                        format: metadata.formato
-                    };
-
-                    //?ltima temporada
-                    if (ultimaTemporada < metadata.temporada) {
-                        ultimaTemporada = metadata.temporada;
-                    }
-
-                    //?ltimo cap?tulo de la temporada
-                    if (temporadaUltimoCapitulo[metadata.temporada] === undefined || temporadaUltimoCapitulo[metadata.temporada] < metadata.capitulo) {
-                        temporadaUltimoCapitulo[metadata.temporada] = metadata.capitulo;
-                    }
-
-                    //Idioma general
-                    if (idiomaGeneral === '') {
-                        idiomaGeneral = metadata.idioma;
-                    }
-                }
-            }
-        }
-
-        for (var kk in temporadas) {
-            chaps = [];
-
-            if (temporadas.hasOwnProperty(kk)) {
-
-                for (var jj in temporadas[kk]) {
-                    if (temporadas[kk].hasOwnProperty(jj)) {
-                        chaps.push(temporadas[kk][jj]);
-                    }
-                }
-
-                temps.push({
-                    title: "Temporada " + kk,
-                    chapters: chaps,
-                    season: kk,
-                    lastChapter: temporadaUltimoCapitulo[kk]
                 });
             }
         }
 
+        // Creo el objeto de temporadas
+        temporadas.forEach(function (kk, index) {
+            chaps = [];
+
+            temporadas[index].forEach(function (jj, index2) {
+                chaps.push(temporadas[index][index2]);
+            });
+
+            temps.push({
+                title: "Temporada " + index,
+                chapters: chaps,
+                season: index,
+                lastChapter: metadata.seasonsDetail[index].lastChapter
+            });
+        });
+
         return {
-            lastSeason: ultimaTemporada,
-            lastChapter: temporadaUltimoCapitulo[ultimaTemporada],
+            lastSeason: metadata.lastSeason,
+            lastChapter: metadata.seasonsDetail[metadata.lastSeason].lastChapter,
             language: idiomaGeneral,
             seasons: temps
         };
@@ -189,17 +193,13 @@ appServices.service('torrentService', function () {
 //Servicio de constantes para compartir
 appServices.service('Constants', function () {
     var constantes = {
-        txibi: {
-            urlCategories: 'http://trex-lovehinaesp.rhcloud.com/api/tx/categories',
-            urlTorrents: 'http://trex-lovehinaesp.rhcloud.com/api/tx/torrents',
-            urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/tx/search',
-            urlDownload: 'http://trex-lovehinaesp.rhcloud.com/api/tx/download'
-        },
-        eztv: {
-            urlCategories: 'http://trex-lovehinaesp.rhcloud.com/api/tx/categories',
-            urlTorrents: 'http://trex-lovehinaesp.rhcloud.com/api/tx/torrents',
-            urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/tx/search',
-            urlDownload: 'http://trex-lovehinaesp.rhcloud.com/api/tx/download'
+        trex: {
+            urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
+            urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
+            urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
+            //urlSeries: 'http://localhost/api/trex/series',
+            //urlSearch: 'http://localhost/api/trex/search',
+            //urlDownloadTorrent: 'http://localhost/api/trex/download'
         }
     };
 
@@ -216,82 +216,3 @@ appServices.service('Constants', function () {
         get: getConstants
     };
 });
-
-//Esta funci?n extrae la temporada, el formato, idioma y el cap?tulo, del t?tulo de un torrent
-function extractMetaInfo(torrentTitle) {
-    var temporada = null, capitulo = null, formato = null, idioma = null;
-
-    //La temporada
-    var aux = torrentTitle.match(/Temporada [0-9]{1,2}/gi);
-    if (aux !== undefined && aux !== null && aux !== '') {
-        aux = aux[0];
-        aux = aux.split(' ');
-        aux = parseInt(aux[1]);
-
-        //Compruebo que es un n?mero de verdad
-        if (!isNaN(aux)) {
-            temporada = aux;
-        }
-    }
-
-    //El capitulo
-    aux = torrentTitle.match(/Cap\.[0-9]{3,4}/gi);
-    if (aux !== undefined && aux !== null && aux !== '') {
-        aux = aux[0];
-        aux = aux.replace('Cap.', '');
-
-        //Verifico la temporada, por si antes no la pude sacar
-        if (temporada === null) {
-            var auxTemp;
-
-            if (aux.length === 3) {
-                auxTemp = aux.charAt(aux.length - 3); //de Cap.103 es el 1
-            } else if (aux.length === 4) {
-                auxTemp = '' + aux.charAt(aux.length - 4) + aux.charAt(aux.length - 3); //de Cap.1103 es el 11
-            }
-
-            auxTemp = parseInt(auxTemp);
-            if (!isNaN(auxTemp)) {
-                temporada = auxTemp;
-            }
-        }
-
-        //Saco el cap?tulo
-        var auxCap = aux.charAt(aux.length - 2) + aux.charAt(aux.length - 1); //de Cap.103 es el 03
-        auxCap = parseInt(auxCap);
-        if (!isNaN(auxCap)) {
-            capitulo = auxCap;
-        }
-    }
-
-    //El idioma
-    aux = torrentTitle.match(/V.O.Sub.[A-Za-zñáéíóúÁÉÍÓÚ ]*/gi);
-    if (aux !== undefined && aux !== null && aux !== '') {
-        aux = aux[0];
-        idioma = aux;
-    } else {
-        aux = torrentTitle.match(/Español[A-Za-zñáéíóúÁÉÍÓÚ ]*/gi);
-        if (aux !== undefined && aux !== null && aux !== '') {
-            aux = aux[0];
-            idioma = aux;
-        }
-    }
-
-    //El formato
-    aux = torrentTitle.match(/HDTV([A-Za-z0-9 ])*/gi);
-    if (aux !== undefined && aux !== null && aux !== '') {
-        aux = aux[0];
-        formato = aux;
-    }
-
-    if (temporada === null || capitulo === null) {
-        return null;
-    } else {
-        return {
-            temporada: temporada,
-            capitulo: capitulo,
-            idioma: idioma,
-            formato: formato
-        }
-    }
-}

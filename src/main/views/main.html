@@ -1,25 +1,28 @@
 <div layout="column" layout-fill>
 
-   
 
-	<md-toolbar class="fixed">
-      <div class="md-toolbar-tools">
-        <h2 flex="65">
+    <md-toolbar class="fixed">
+        <div class="md-toolbar-tools">
+            <h2 flex="60">
                 <span class="negrita"><img src="images/white.png"
                                            style="vertical-align: text-bottom; width: 30px; cursor:pointer"
-                                           ng-click="about($event)" /> Series en descarga</span>
+                                           ng-click="about($event)"/> Series en descarga</span>
             </h2>
 
             <md-switch ng-model="trexStatus" name="trexStatus" ng-change="changeTrexStatus()"
-                       class="md-accent right" flex="20">
-                {{trexStatus?'Activo':'Inactivo'}}
+                       class="md-accent right" flex="15">
+                {{trexStatus?'On':'Off'}}
                 <md-tooltip> Activar/Desactivar TRex</md-tooltip>
             </md-switch>
+            <a ng-href="#" ng-click="checkDownloadsNow()" class="right iconC" flex="10">
+                <img src="images/refresh.png" style="width: 24px; height: 24px;"/>
+                <md-tooltip> Comprobar ahora</md-tooltip>
+            </a>
             <a ng-href="{{opcionesLink}}" class="right iconC" flex="10">
-                <img src="images/rueda.png" style="width: 24px; height: 24px;" />
+                <img src="images/rueda.png" style="width: 24px; height: 24px;"/>
                 <md-tooltip> Configuración</md-tooltip>
             </a>
-      </div>
+        </div>
     </md-toolbar>
 
 
@@ -51,7 +54,8 @@
                         <p ng-show="cuantos>0" class="enlace"
                            ng-click="showExclusions($event, serie.title)">Exclusiones: {{cuantos}}</p>
                     </div>
-                    <md-button class="md-primary no-min-width" ng-click="removeSerie($event, serie.title)" aria-label="" flex>
+                    <md-button class="md-primary no-min-width" ng-click="removeSerie($event, serie.title)" aria-label=""
+                               flex>
                         <md-icon md-svg-icon="images/ic_clear_black_24px.svg"></md-icon>
                     </md-button>
                 </div>

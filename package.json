@@ -3,7 +3,11 @@
   "name": "webapp-template-html",
   "version": "1.1.2",
   "description": "HTML scaffolding template for development of web applications.",
-  "keywords": ["template", "html", "scaffolding"],
+  "keywords": [
+    "template",
+    "html",
+    "scaffolding"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ligreman/webapp-grunt-html"

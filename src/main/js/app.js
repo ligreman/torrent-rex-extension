@@ -34,7 +34,7 @@ var myApp = angular.module('TorrentRex', [
         //El Theme
         $mdThemingProvider.theme('default')
             .primaryColor('indigo')
-            .accentColor('green');
+            .accentColor('teal');
 
         //Validación de urls
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|http|chrome-extension):/);

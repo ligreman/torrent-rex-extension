@@ -16,14 +16,11 @@
             <md-progress-circular class="md-primary center" md-mode="indeterminate"></md-progress-circular>
         </div>
 
-        <section ng-repeat="category in categories | filter:{title:'Series'}" ng-hide="loading">
+        <!--<section ng-repeat="category in categories | filter:{title:'Series'}" ng-hide="loading">
             <md-subheader class="md-primary custom">{{category.title}}</md-subheader>
             <md-list layout="column">
                 <md-item ng-repeat="element in category.elements"
-                         ng-class="claseHover"
-                         ng-mouseenter="claseHover='item-hover'"
-                         ng-mouseleave="claseHover='item-no-hover'"
-                         ng-init="claseHover='item-no-hover'"
+
                          ng-click="goto('chapters', element.url, element.name, category.title, 'series')">
                     <md-item-content>
                         <div class="md-tile-left">
@@ -35,7 +32,79 @@
                     </md-item-content>
                 </md-item>
             </md-list>
-        </section>
+        </section>-->
+
+        <md-tabs id="pestanas" class="md-hue-3" ng-hide="loading">
+            <md-tab>
+                <md-tab-label>Servidor T</md-tab-label>
+                <md-tab-body>
+                    <md-tabs>
+                        <md-tab>
+                            <md-tab-label>Series SD</md-tab-label>
+                            <md-tab-body>
+                                <md-list-item ng-repeat="serie in servers[0].sd"
+                                              ng-click="goto('chapters', serie.id, serie.name, 'SD', 'T')">
+                                    <p> {{ serie.name }}</p>
+                                </md-list-item>
+                            </md-tab-body>
+                        </md-tab>
+                        <md-tab>
+                            <md-tab-label>Series HD</md-tab-label>
+                            <md-tab-body>
+                                <md-list-item ng-repeat="serie in servers[0].hd"
+                                              ng-click="goto('chapters', serie.id, serie.name, 'HD', 'T')">
+                                    <p> {{ serie.name }}</p>
+                                </md-list-item>
+                            </md-tab-body>
+                        </md-tab>
+                        <md-tab>
+                            <md-tab-label>Series VO</md-tab-label>
+                            <md-tab-body>
+                                <md-list-item ng-repeat="serie in servers[0].vo"
+                                              ng-click="goto('chapters', serie.id, serie.name, 'V.O.', 'T')">
+                                    <p> {{ serie.name }}</p>
+                                </md-list-item>
+                            </md-tab-body>
+                        </md-tab>
+                    </md-tabs>
+                </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+                <md-tab-label>Servidor N</md-tab-label>
+                <md-tab-body>
+                    <md-tabs>
+                        <md-tab>
+                            <md-tab-label>Series SD</md-tab-label>
+                            <md-tab-body>
+                                <md-list-item ng-repeat="serie in servers[1].sd"
+                                              ng-click="goto('chapters', serie.id, serie.name, 'SD', 'N')">
+                                    <p> {{ serie.name }}</p>
+                                </md-list-item>
+                            </md-tab-body>
+                        </md-tab>
+                        <md-tab>
+                            <md-tab-label>Series HD</md-tab-label>
+                            <md-tab-body>
+                                <md-list-item ng-repeat="serie in servers[1].hd"
+                                              ng-click="goto('chapters', serie.id, serie.name, 'HD', 'N')">
+                                    <p> {{ serie.name }}</p>
+                                </md-list-item>
+                            </md-tab-body>
+                        </md-tab>
+                        <md-tab>
+                            <md-tab-label>Series VO</md-tab-label>
+                            <md-tab-body>
+                                <md-list-item ng-repeat="serie in servers[1].vo"
+                                              ng-click="goto('chapters', serie.id, serie.name, 'V.O.', 'N')">
+                                    <p> {{ serie.name }}</p>
+                                </md-list-item>
+                            </md-tab-body>
+                        </md-tab>
+                    </md-tabs>
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
     </md-content>
 
 </div>
