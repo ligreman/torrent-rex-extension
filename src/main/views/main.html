@@ -32,8 +32,9 @@
             <div layout="row" ng-class="(serie.active)?'serie-enabled':'serie-disabled'">
                 <div flex="75">
                     <h3>
-                        <md-button class="minimal" aria-label="" ng-click="goToSerie(serie.url, serie.title, 'main')">
-                            {{serie.title}}
+                        <md-button class="minimal" aria-label=""
+                                   ng-click="goToSerie(serie.id, serie.title, serie.category, serie.source, 'main')">
+                            {{serie.title}} ({{serie.category}})
                         </md-button>
                     </h3>
                 </div>

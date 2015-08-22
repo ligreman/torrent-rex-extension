@@ -42,7 +42,7 @@
                         <md-tab>
                             <md-tab-label>Series SD</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[0].sd"
+                                <md-list-item ng-repeat="serie in servers[0].sd | orderBy: 'name'"
                                               ng-click="goto('chapters', serie.id, serie.name, 'SD', 'T')">
                                     <p> {{ serie.name }}</p>
                                 </md-list-item>
@@ -51,7 +51,7 @@
                         <md-tab>
                             <md-tab-label>Series HD</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[0].hd"
+                                <md-list-item ng-repeat="serie in servers[0].hd | orderBy: 'name'"
                                               ng-click="goto('chapters', serie.id, serie.name, 'HD', 'T')">
                                     <p> {{ serie.name }}</p>
                                 </md-list-item>
@@ -60,7 +60,7 @@
                         <md-tab>
                             <md-tab-label>Series VO</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[0].vo"
+                                <md-list-item ng-repeat="serie in servers[0].vo | orderBy: 'name'"
                                               ng-click="goto('chapters', serie.id, serie.name, 'V.O.', 'T')">
                                     <p> {{ serie.name }}</p>
                                 </md-list-item>
@@ -77,7 +77,7 @@
                         <md-tab>
                             <md-tab-label>Series SD</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[1].sd"
+                                <md-list-item ng-repeat="serie in servers[1].sd | orderBy: 'name'"
                                               ng-click="goto('chapters', serie.id, serie.name, 'SD', 'N')">
                                     <p> {{ serie.name }}</p>
                                 </md-list-item>
@@ -86,7 +86,7 @@
                         <md-tab>
                             <md-tab-label>Series HD</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[1].hd"
+                                <md-list-item ng-repeat="serie in servers[1].hd | orderBy: 'name'"
                                               ng-click="goto('chapters', serie.id, serie.name, 'HD', 'N')">
                                     <p> {{ serie.name }}</p>
                                 </md-list-item>
@@ -95,7 +95,7 @@
                         <md-tab>
                             <md-tab-label>Series VO</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[1].vo"
+                                <md-list-item ng-repeat="serie in servers[1].vo | orderBy: 'name'"
                                               ng-click="goto('chapters', serie.id, serie.name, 'V.O.', 'N')">
                                     <p> {{ serie.name }}</p>
                                 </md-list-item>

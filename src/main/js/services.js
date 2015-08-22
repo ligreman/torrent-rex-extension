@@ -115,7 +115,7 @@ appServices.service('torrentService', function () {
             listaTorrents = data.torrents;
 
         //Saco los excluidos
-        var seriesActuales = JSON.parse(localStorage.getItem('series')), excluded = []; //TODO excluidos
+        var seriesActuales = JSON.parse(localStorage.getItem('series')), excluded = [];
         if (seriesActuales !== undefined && seriesActuales !== null && seriesActuales.length > 0) {
             //Busco la serie
             for (var i = 0; i < seriesActuales.length; i++) {
@@ -136,6 +136,8 @@ appServices.service('torrentService', function () {
                 seasonChapters = listaTorrents[season];
 
                 seasonChapters.forEach(function (chapter) {
+                    console.log("Chapter:");
+                    console.log(chapter);
                     //Miro a ver si está excluido
                     if (excluded.indexOf(chapter.id) === -1) {
                         //Genero la lista de capítulos de esta temporada
@@ -146,6 +148,7 @@ appServices.service('torrentService', function () {
                         temporadas[season][chapter.chapter] = {
                             title: chapter.title,
                             id: chapter.id,
+                            torrentId: chapter.torrentId,
                             chapter: chapter.chapter,
                             language: chapter.language,
                             size: chapter.size,
@@ -177,9 +180,11 @@ appServices.service('torrentService', function () {
             });
         });
 
+        var ulti = metadata.seasonsDetail[metadata.lastSeason];
+
         return {
             lastSeason: metadata.lastSeason,
-            lastChapter: metadata.seasonsDetail[metadata.lastSeason].lastChapter,
+            lastChapter: (ulti === undefined) ? 0 : ulti.lastChapter,
             language: idiomaGeneral,
             seasons: temps
         };

@@ -70,10 +70,12 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
         checkNotifications();
 
         //Go a una serie
-        $scope.goToSerie = function (url, name, quien) {
-            paramService.setUrl(url);
-            paramService.setTitle(name);
+        $scope.goToSerie = function (param, name, category, source, quien) {
+            paramService.setId(param); //serie id
+            paramService.setTitle(name); //serie name
+            paramService.setSource(source); //N T
             paramService.setLastPage(quien);
+            paramService.setCategory(category);
             $location.path('/chapters');
         };
 
@@ -83,7 +85,6 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
         };
 
         //Exclusiones
-        //TODO
         $scope.showExclusions = function (ev, serie) {
             var auxSeries = $scope.series;
 
@@ -106,7 +107,6 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
         };
 
         //Contar exclusiones
-        //TODO
         $scope.countExcluded = function (exclusions) {
             return Object.keys(exclusions).length;
         };
@@ -202,9 +202,9 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         //ID y título de la serie. El título no tiene metainformación
         $scope.idSerie = paramService.getId();
         $scope.category = paramService.getCategory();
-        $scope.title = paramService.getTitle() + ' (' + $scope.category + ')';
+        $scope.title = paramService.getTitle();
         $scope.lastPage = paramService.getLastPage();
-        //$scope.source = paramService.getSource(); //T o N dependiendo del servidor elegido
+        $scope.source = paramService.getSource(); //T o N dependiendo del servidor elegido
 
         //Toasts
         $scope.toastPosition = {bottom: true, top: false, left: false, right: true};
@@ -228,19 +228,18 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         $http.get(constantes.trex.urlSeries + '/' + $scope.idSerie).
             success(function (data) {
                 $scope.loading = false;
-
                 $scope.info = torrentService.processTorrents(data);
                 console.log($scope.info);
             });
 
         //Descarga de un torrent
         $scope.download = function (torrentId) {
-            downloadTorrent(torrentId);
+            console.log(constantes['trex'].urlDownloadTorrent + '/' + torrentId);
+            downloadTorrent(constantes['trex'].urlDownloadTorrent + '/' + torrentId);
         };
 
 
         //Comprueba si un torrent está excluido
-        //TODO
         $scope.isExcluded = function (id) {
             var seriesActuales = JSON.parse(localStorage.getItem('series')), excluded = false;
             if (seriesActuales !== undefined && seriesActuales !== null && seriesActuales.length > 0) {
@@ -255,7 +254,6 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         };
 
         //Excluye un torrent de la descarga de esta serie (tiene que estar añadida antes)
-        //TODO
         $scope.excludeTorrent = function (id, capiTitle, ev) {
             var seriesActuales = JSON.parse(localStorage.getItem('series')), error = false, encontrado = false;
 
@@ -291,7 +289,6 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         };
 
         //Incluye un torrent a las descargas, previamente exluido
-        //TODO
         $scope.desExcludeTorrent = function (id, ev) {
             desexcluir($scope, id, true);
         };
@@ -464,7 +461,8 @@ function addSerieDownload($scope, answer) {
             id: $scope.idSerie,
             title: $scope.title,
             url: $scope.url,
-            //server: $scope.source,
+            source: $scope.source,
+            category: $scope.category,
             language: $scope.info.language,
             lastSeason: parseInt(answer.fromTemporada),
             lastChapter: epi,
@@ -518,7 +516,6 @@ function checkNotifications() {
     }
 }
 
-//TODO
 function desexcluir($scope, id, showMsg) {
     var seriesActuales = JSON.parse(localStorage.getItem('series')), error = false, encontrado = false;
     if (seriesActuales !== undefined && seriesActuales !== null && seriesActuales.length > 0) {
@@ -549,7 +546,6 @@ function desexcluir($scope, id, showMsg) {
 //*****************************************************************//
 //*****************************************************************//
 //*****************************************************************//
-//TODO
 //Controlador de la vista de buscar torrents
 appControllers.controller('TorrentsCtrl', ['$scope', '$location', '$http', 'Constants',
     function ($scope, $location, $http, Constants) {
@@ -566,7 +562,7 @@ appControllers.controller('TorrentsCtrl', ['$scope', '$location', '$http', 'Cons
             $scope.maxPages = 0;
 
             //Consulto el WS para obtener las categorías
-            $http.get(constantes['txibi'].urlSearch + '/' + btoa(term) + '/' + page).
+            $http.get(constantes['trex'].urlSearch + '/' + btoa(term) + '/' + page).
                 success(function (data) {
                     $scope.torrents = data.torrents;
                     $scope.loading = false;
@@ -578,7 +574,7 @@ appControllers.controller('TorrentsCtrl', ['$scope', '$location', '$http', 'Cons
 
         //Descarga de un torrent
         $scope.download = function (torrentId) {
-            downloadTorrent(constantes['txibi'].urlDownload + '/' + torrentId);
+            downloadTorrent(constantes['trex'].urlDownloadTorrent + '/' + torrentId);
         };
 
         //GoTo

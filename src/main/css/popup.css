@@ -131,7 +131,7 @@ md-progress-circular.center {
 .destacado {
     display: flex;
     align-items: center;
-    height: 50px;
+    padding: 10px 5px;
     background-color: #BC9EFF;
 }
 
