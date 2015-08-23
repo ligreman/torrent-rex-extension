@@ -1,5 +1,6 @@
 "use strict";
 //ID google store: ccjildcogcgklkpedpomlbghfbikmeaa
+var actualVersion = '2.0.0';
 
 //Obtengo el localStorage
 var datosSeries = localStorage.getItem('series'),
@@ -13,9 +14,8 @@ if (datosSeries !== null) {
         datosDownloads = '[]';
     }
 
-    var hh = btoa(datosSeries),
-        hh2 = btoa(datosDownloads);
-    hh = hh + ';' + hh2;
+    var hh = btoa(actualVersion) + ';' + btoa(datosSeries) + ';' + btoa(datosDownloads);
+
     var url = URL.createObjectURL(new Blob([hh], {type: 'text/plain'}));
     document.getElementById('linkExportar').setAttribute('href', url);
 } else {
@@ -49,18 +49,23 @@ function handleFileSelect(evt) {
                     //console.log(theFile);
                     //console.log(e);
                     var data = e.target.result;
-                    var splitter = data.split(';'), dataSeries, dataDownloads, tipoBackup = '';
+                    var splitter = data.split(';'), dataSeries, dataDownloads, versionBackup = '';
 
                     try {
-                        if (splitter.length === 2) {
-                            //Backup nuevo
+                        if (splitter.length === 3) {
+                            // V 2.0
+                            versionBackup = atob(splitter[0]);
+                            dataSeries = atob(splitter[1]);
+                            dataDownloads = atob(splitter[2]);
+                        } else if (splitter.length === 2) {
+                            //Backup nuevo V 1.2
                             dataSeries = atob(splitter[0]);
                             dataDownloads = atob(splitter[1]);
-                            tipoBackup = 'nuevo';
+                            versionBackup = '1.1.1';
                         } else if (splitter.length === 1) {
-                            //Backup antiguo
+                            //Backup antiguo V 1.0
                             dataSeries = atob(splitter[0]);
-                            tipoBackup = 'viejo';
+                            versionBackup = '1.0.0';
                         } else {
                             error = 'El contenido del fichero seleccionado no es correcto, puede haberse corrompido.';
                         }
@@ -81,7 +86,11 @@ function handleFileSelect(evt) {
                             //console.log("es valido");
                             localStorage.setItem('series', dataSeries);
 
-                            if (tipoBackup === 'nuevo') {
+                            if (versionBackup === '2.0.0') {
+                                localStorage.setItem('downloads', dataDownloads);
+                            }
+
+                            if (versionBackup === '1.1.1') {
                                 localStorage.setItem('downloads', dataDownloads);
                             }
 

@@ -1,11 +1,20 @@
 "use strict";
 
 //Logger
-var DEBUG_MODE = true;
+var DEBUG_MODE = true, version = '2.0.0';
 function logger(msg) {
     if (DEBUG_MODE) {
         console.log(msg);
     }
+}
+
+//Check de versión
+var localVersion = localStorage.getItem('version');
+logger(localVersion);
+if (localVersion !== null) {
+    //Hago cosas de cambio de versiones
+} else {
+    localStorage.setItem('version', version);
 }
 
 var constantes = {
@@ -21,7 +30,7 @@ var constantes = {
 
 function checkDownloads() {
     var status = (localStorage.getItem('trexStatus') === 'true'),
-        series, newTorrents = [], url, datos, lastSerie;
+        series, newTorrents = [];
 
     logger("Comienzo la comprobación de descargas");
 
