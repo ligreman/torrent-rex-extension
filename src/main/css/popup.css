@@ -78,7 +78,7 @@ html p, body p {
 }
 
 .footer-spacing {
-    margin-bottom: 100px;
+    margin-bottom: 120px;
 }
 
 .header-spacing {
@@ -237,6 +237,7 @@ md-backdrop.md-opaque.md-default-theme, .md-dialog-container {
 .iconC {
     margin-top: 7px;
     padding-right: 5px;
+    cursor: pointer;
 }
 
 .small-buttons button {

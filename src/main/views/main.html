@@ -14,7 +14,7 @@
                 {{trexStatus?'On':'Off'}}
                 <md-tooltip> Activar/Desactivar TRex</md-tooltip>
             </md-switch>
-            <a ng-href="#" ng-click="checkDownloadsNow()" class="right iconC" flex="10">
+            <a ng-click="checkDownloadsNow()" class="right iconC" flex="10">
                 <img src="images/refresh.png" style="width: 24px; height: 24px;"/>
                 <md-tooltip> Comprobar ahora</md-tooltip>
             </a>
@@ -28,7 +28,7 @@
 
     <md-content id="main" class="header-spacing footer-spacing">
         <h3 class="center" ng-show="series.length == 0">Añade series para su descarga automática.</h3>
-        <md-card ng-repeat="serie in series track by serie.title">
+        <md-card ng-repeat="serie in series track by serie.id">
             <div layout="row" ng-class="(serie.active)?'serie-enabled':'serie-disabled'">
                 <div flex="75">
                     <h3>

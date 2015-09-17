@@ -137,6 +137,8 @@ function checkDownloads() {
         //Lanzo la descarga de torrents
         processDownloads();
     }
+
+    localStorage.setItem('pendingCheck', false);
 }
 
 //Listener de cuando salta la alarma
@@ -205,7 +207,7 @@ function processDownloads() {
     }
 
     var final = descargas.length, contador = 0, correctos = [],
-        timer = 0;
+        timer = 0, max_downloads = 5;
 
     if (notifications === undefined || notifications === null) {
         notifications = [];
@@ -213,47 +215,52 @@ function processDownloads() {
 
     descargas.forEach(function (torrent) {
         timer++;
-        setTimeout(function () {
-            downloadTorrent(torrent, function (resultado) {
-                if (resultado) {
-                    //Añado el torrent como descargado
-                    correctos.push(torrent.torrentId);
 
-                    var m = new Date();
-                    var dateString =
-                        ("0" + m.getUTCDate()).slice(-2) + "/" +
-                        ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
-                        m.getUTCFullYear() + " " +
-                        ("0" + m.getUTCHours()).slice(-2) + ":" +
-                        ("0" + m.getUTCMinutes()).slice(-2) + ":" +
-                        ("0" + m.getUTCSeconds()).slice(-2);
+        logger('Descarga programada ' + timer);
 
-                    //Meto notificación
-                    notifications.push({
-                        text: torrent.title,
-                        date: dateString
-                    });
-                }
-                contador++;
+        if (timer <= max_downloads) {
+            setTimeout(function () {
+                downloadTorrent(torrent, function (resultado) {
+                    if (resultado) {
+                        //Añado el torrent como descargado
+                        correctos.push(torrent.torrentId);
 
-                //Si ya he procesado todos, elimino los correctos
-                if (contador === final) {
-                    localStorage.setItem('notifications', JSON.stringify(notifications));
+                        var m = new Date();
+                        var dateString =
+                            ("0" + m.getUTCDate()).slice(-2) + "/" +
+                            ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
+                            m.getUTCFullYear() + " " +
+                            ("0" + m.getUTCHours()).slice(-2) + ":" +
+                            ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+                            ("0" + m.getUTCSeconds()).slice(-2);
 
-                    //Pongo numerito en el icono
-                    if (notifications.length > 0) {
-                        chrome.browserAction.setBadgeText({
-                            text: "" + notifications.length
-                        });
-                        chrome.browserAction.setBadgeBackgroundColor({
-                            color: '#1B5E20'
+                        //Meto notificación
+                        notifications.push({
+                            text: torrent.title,
+                            date: dateString
                         });
                     }
+                    contador++;
 
-                    downloadsRemoveOK(correctos);
-                }
-            });
-        }, 2000 * timer);
+                    //Si ya he procesado todos, elimino los correctos
+                    if (contador === final || contador === max_downloads) {
+                        localStorage.setItem('notifications', JSON.stringify(notifications));
+
+                        //Pongo numerito en el icono
+                        if (notifications.length > 0) {
+                            chrome.browserAction.setBadgeText({
+                                text: "" + notifications.length
+                            });
+                            chrome.browserAction.setBadgeBackgroundColor({
+                                color: '#1B5E20'
+                            });
+                        }
+
+                        downloadsRemoveOK(correctos);
+                    }
+                });
+            }, 2000 * timer);
+        }
     });
 }
 
@@ -272,6 +279,13 @@ function downloadsRemoveOK(correctos) {
 
     //Al terminar guardo
     localStorage.setItem('downloads', JSON.stringify(restantes));
+
+    //Si quedan restantes, programo otra descarga
+    if (restantes.length > 0) {
+        chrome.alarms.create('checkTrex', {
+            delayInMinutes: 5
+        });
+    }
 }
 
 //Descarga un torrent

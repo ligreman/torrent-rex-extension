@@ -3,8 +3,8 @@
 var appControllers = angular.module('appControllers', []);
 
 //Controlador de la vista inicial
-appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http', '$mdDialog', 'paramService', 'Constants',
-    function ($scope, $route, $location, $http, $mdDialog, paramService, Constants) {
+appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http', '$mdDialog', '$mdToast', 'paramService', 'Constants',
+    function ($scope, $route, $location, $http, $mdDialog, $mdToast, paramService, Constants) {
         $scope.series = JSON.parse(localStorage.getItem('series'));
         $scope.trexStatus = (localStorage.getItem('trexStatus') === 'true');
         $scope.lastCheck = localStorage.getItem('lastCheck');
@@ -58,9 +58,20 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
 
         //Lanzo un chequeo en 1 minuto
         $scope.checkDownloadsNow = function () {
-            chrome.alarms.create('checkTrex', {
-                delayInMinutes: 1
-            });
+            var chequeoPendiente = (localStorage.getItem('pendingCheck') === 'true');
+
+            if (!chequeoPendiente) {
+                chrome.alarms.create('checkTrex', {
+                    delayInMinutes: 1
+                });
+                localStorage.setItem('pendingCheck', true);
+                $mdToast.show(
+                    $mdToast.simple()
+                        .content('Comprobación en 1 minuto')
+                        .position('bottom right')
+                        .hideDelay(3000)
+                );
+            }
         };
 
         //Alarmas
@@ -154,14 +165,12 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
 appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramService', 'Constants',
     function ($scope, $location, $http, paramService, Constants) {
         var constantes = Constants.get();
-        console.log(constantes);
         $scope.loading = true;
         $scope.serverCount = 0;
         $scope.selectedServer = 0;
 
         //Si ya tengo categorías cargando no consulto al webservice
         if (constantes.series === undefined || constantes.series === null) {
-            console.log("Pido las series al webservice");
             //Consulto el WS para obtener las categorï¿½as
             $http.get(constantes.trex.urlSeries).
                 success(function (data) {
@@ -170,7 +179,6 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
                     Constants.set('series', data.servers);
                 });
         } else {
-            console.log("Ya tengo las series de antes");
             $scope.servers = constantes.series;
             $scope.loading = false;
         }
@@ -229,12 +237,10 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
             success(function (data) {
                 $scope.loading = false;
                 $scope.info = torrentService.processTorrents(data);
-                console.log($scope.info);
             });
 
         //Descarga de un torrent
         $scope.download = function (torrentId) {
-            console.log(constantes['trex'].urlDownloadTorrent + '/' + torrentId);
             downloadTorrent(constantes['trex'].urlDownloadTorrent + '/' + torrentId);
         };
 
@@ -446,9 +452,9 @@ function addSerieDownload($scope, answer) {
 
     //Compruebo que la serie no está ya añadida
     for (var i = 0; i < actualSeries.length; i++) {
-        if (actualSeries[i].title == $scope.title) {
+        if (actualSeries[i].title === $scope.title && actualSeries[i].category === $scope.category) {
             //Error serie ya existe
-            $scope.showSimpleToast('La serie ya estaba descargándose.');
+            $scope.showSimpleToast('La serie ya está descargándose.');
             yaExiste = true;
         }
     }
@@ -482,11 +488,19 @@ function addSerieDownload($scope, answer) {
 function checkAlarms() {
     var status = (localStorage.getItem('trexStatus') === 'true');
 
+    //chrome.alarms.getAll(function(alarms){console.log(alarms);});
+
     if (status) {
-        //La creo. Como va con nombre no hay problema de duplicados
-        chrome.alarms.create('trex', {
-            delayInMinutes: 1,
-            periodInMinutes: 60
+        //Miro a ver si existe ya la alarma
+        chrome.alarms.get('trex', function (alarm) {
+            if (alarm === undefined) {
+                //La creo. Como va con nombre no hay problema de duplicados
+                chrome.alarms.create('trex', {
+                    delayInMinutes: 1,
+                    periodInMinutes: 60
+                });
+                localStorage.setItem('pendingCheck', true);
+            }
         });
     } else {
         //Desactivo alarmas
