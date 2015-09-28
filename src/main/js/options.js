@@ -5,6 +5,7 @@ var actualVersion = '2.0.0';
 //Obtengo el localStorage
 var datosSeries = localStorage.getItem('series'),
     datosDownloads = localStorage.getItem('downloads'),
+    datosQuality = localStorage.getItem('quality'),
     schema = '{"$schema":"http://json-schema.org/draft-04/schema#","id":"http://jsonschema.net","type":"array","items":{"id":"http://jsonschema.net/0","type":"object","properties":{"title":{"id":"http://jsonschema.net/0/title","type":"string"},"url":{"id":"http://jsonschema.net/0/url","type":"string"},"server":{"id":"http://jsonschema.net/0/server","type":"string"},"language":{"id":"http://jsonschema.net/0/language","type":"string"},"lastSeason":{"id":"http://jsonschema.net/0/lastSeason","type":"string"},"lastChapter":{"id":"http://jsonschema.net/0/lastChapter","type":"integer"},"excluded":{"id":"http://jsonschema.net/0/excluded","type":"object","properties":{"128862":{"id":"http://jsonschema.net/0/excluded/128862","type":"object","properties":{"title":{"id":"http://jsonschema.net/0/excluded/128862/title","type":"string"},"torrentId":{"id":"http://jsonschema.net/0/excluded/128862/torrentId","type":"string"}}}}},"active":{"id":"http://jsonschema.net/0/active","type":"boolean"}},"required":["title","url","server","language","lastSeason","lastChapter","excluded","active"]},"required":["0"]}';
 
 if (datosSeries !== null) {
@@ -22,6 +23,27 @@ if (datosSeries !== null) {
     document.getElementById('exportar').innerHTML = "No hay datos.";
 }
 
+
+//RADIO CAMBIO CALIDAD
+if (datosQuality) {
+    document.getElementById(datosQuality + 'Q').setAttribute('checked', 'checked');
+}
+
+document.getElementById('lowQ').onchange = function () {
+    selectedRadio(this.value);
+};
+document.getElementById('highQ').onchange = function () {
+    selectedRadio(this.value);
+};
+
+function selectedRadio(cual) {
+    if (cual === 'low' || cual === 'high') {
+        localStorage.setItem('quality', cual);
+        datosQuality = cual;
+    }
+}
+
+//IMPORTAR
 document.getElementById('aImportar').addEventListener('change', handleFileSelect, false);
 
 function handleFileSelect(evt) {

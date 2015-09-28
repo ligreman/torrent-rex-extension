@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 
 var appControllers = angular.module('appControllers', []);
 
@@ -11,6 +11,12 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
         $scope.errorTorrents = JSON.parse(localStorage.getItem('errores'));
         $scope.downloadingTorrents = JSON.parse(localStorage.getItem('downloads'));
         $scope.opcionesLink = chrome.extension.getURL('options.html');
+
+        //Calidad por defecto
+        var q = localStorage.getItem('quality');
+        if (!q || (q !== 'low' && q !== 'high')) {
+            localStorage.setItem('low');
+        }
 
         //Borro la lista de series
         Constants.set('series', null);
@@ -183,6 +189,35 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
             $scope.loading = false;
         }
 
+        $scope.errorUrl = null;
+        //Función que valida la url de la serie a buscar
+        $scope.searchSerie = function (url) {
+            $scope.errorUrl = null;
+
+            var patt = /http:\/\/www\.[a-z]+\.com\/todos-los-capitulos\/series\/([a-zA-Z0-9-]+)\//,
+                patt1 = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-]+)\//;
+
+            var res = patt.exec(url.serieUrl),
+                res1 = patt1.exec(url.serieUrl);
+
+            var serie = '', clase = '';
+
+            if (res !== null) {
+                serie = res[1].trim();
+            } else if (res1 !== null) {
+                serie = res1[1].trim();
+                clase = '1';
+            }
+
+            if (serie !== '') {
+                var namecito = capitalize(serie);
+
+                $scope.goto('chapters', serie, namecito, 'SD', 'SN' + clase)
+            } else {
+                $scope.errorUrl = 'Introduce una url válida';
+            }
+        };
+
         //GoTo
         $scope.goto = function (path, param, name, category, source) {
             paramService.setId(param);
@@ -195,7 +230,7 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
     }]);
 
 
-//Controlador de la vista de Añadir series - Capítulos
+//Controlador de la vista de Añadir series - Capítulos �
 appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdDialog', '$mdToast', 'paramService', 'torrentService', 'Constants',
     function ($scope, $location, $http, $mdDialog, $mdToast, paramService, torrentService, Constants) {
         var constantes = Constants.get();
@@ -230,10 +265,21 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
             );
         };
 
-//http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/dG9ycmVudHMucGhwP3Byb2Nlc2FyPTEmY2F0ZWdvcmlhcz0nU2VyaWVzJyZzdWJjYXRlZ29yaWE9MTg2NA==/T
-//http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/torrents.php?procesar=1&categorias='Series'&subcategoria=1864/T
+        var enlace = '', quality = localStorage.getItem('quality');
+        if (!quality || (quality !== 'low' && quality !== 'high')) {
+            quality = 'low';
+        }
+
+        if ($scope.source === 'SN' || $scope.source === 'SN1') {
+            enlace = constantes.trex.urlSearchSerie + '/' + $scope.source + '/' + $scope.idSerie + '/' + quality;
+        } else {
+            enlace = constantes.trex.urlSeries + '/' + $scope.idSerie + '/' + quality;
+        }
+
+        //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/dG9ycmVudHMucGhwP3Byb2Nlc2FyPTEmY2F0ZWdvcmlhcz0nU2VyaWVzJyZzdWJjYXRlZ29yaWE9MTg2NA==/T
+        //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/torrents.php?procesar=1&categorias='Series'&subcategoria=1864/T
         //Petición de los torrents
-        $http.get(constantes.trex.urlSeries + '/' + $scope.idSerie).
+        $http.get(enlace).
             success(function (data) {
                 $scope.loading = false;
                 $scope.info = torrentService.processTorrents(data);
@@ -605,3 +651,13 @@ function downloadTorrent(urlTorrent) {
     });
 }
 
+function capitalize(name) {
+    name = normalizeName(name);
+    return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+function normalizeName(name) {
+    return name.toLowerCase().replace(/-(.)/g, function (match, group1) {
+        return ' ' + group1.toUpperCase();
+    });
+}

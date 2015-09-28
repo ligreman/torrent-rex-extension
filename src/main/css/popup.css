@@ -36,6 +36,10 @@ html p, body p {
     font-weight: bold;
 }
 
+.italic {
+    font-style: italic;
+}
+
 .center {
     text-align: center;
 }
@@ -132,7 +136,7 @@ md-progress-circular.center {
     display: flex;
     align-items: center;
     padding: 10px 5px;
-    background-color: #BC9EFF;
+    background-color: rgba(33, 150, 243, 0.48);
 }
 
 .destacado.center {
@@ -245,3 +249,25 @@ md-backdrop.md-opaque.md-default-theme, .md-dialog-container {
     margin-bottom: 0;
 }
 
+.contenedor {
+    padding: 10px 20px;
+    background-color: #F5F5F5;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.titulo {
+    border-bottom: 1px solid #DDD;
+}
+
+.colorito {
+    background-color: rgba(33, 150, 243, 0.15);
+}
+
+.optionsH2 {
+    border-bottom: 1px solid #DDDDDD;
+}

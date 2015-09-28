@@ -21,11 +21,11 @@
 
         <div ng-hide="loading">
             <div class="row metainfo">
-                <h1>{{title}}</h1>
+                <h1 class="titulo">{{title}}</h1>
 
-                <p>Idioma: {{info.language}}</p>
+                <p><strong>Idioma:</strong> {{info.language}}</p>
 
-                <p>Última emisión: Temporada {{info.lastSeason}} - Capítulo {{info.lastChapter}}</p>
+                <p><strong>Última emisión:</strong> Temporada {{info.lastSeason}} - Capítulo {{info.lastChapter}}</p>
             </div>
 
             <div class="center" ng-hide="info.lastSeason == 0">
@@ -36,12 +36,13 @@
             </div>
 
             <br/>
+            <hr/>
 
-            <div ng-repeat="temporada in info.seasons">
+            <div ng-repeat="temporada in info.seasons" class="colorito">
                 <div layout="row">
                     <h2 class="metainfo" flex>{{temporada.title}}</h2>
 
-                    <p class="metainfo right ptop10" flex>Último capítulo emitido: {{temporada.lastChapter}}</p>
+                    <p class="metainfo right ptop10 italic" flex>Último capítulo emitido: {{temporada.lastChapter}}</p>
                 </div>
 
                 <md-card ng-repeat="capi in temporada.chapters">

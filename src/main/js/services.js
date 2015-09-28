@@ -200,9 +200,11 @@ appServices.service('Constants', function () {
     var constantes = {
         trex: {
             urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
+            urlSearchSerie: 'http://trex-lovehinaesp.rhcloud.com/api/trex/searchserie',
             urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
             urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
             //urlSeries: 'http://localhost/api/trex/series',
+            //urlSearchSerie: 'http://localhost/api/trex/searchserie',
             //urlSearch: 'http://localhost/api/trex/search',
             //urlDownloadTorrent: 'http://localhost/api/trex/download'
         }

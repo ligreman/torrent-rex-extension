@@ -75,6 +75,71 @@
                 <md-tab-body>
                     <md-tabs>
                         <md-tab>
+                            <md-tab-label>N Original</md-tab-label>
+                            <md-tab-body>
+                                <div class="contenedor">
+                                    <p>Introduce el enlace de la serie **, desde la página de todos los capítulos
+                                        (http://www.nnnnnn.com/todos-los-capitulos/series/nombre-de-la-serie/):</p>
+
+                                    <form name="serieSearch">
+                                        <md-input-container flex>
+                                            <label>URL de la serie</label>
+                                            <input type="url" name="serieUrl" ng-model="serieUrl" required>
+                                            <span class="error" ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie</span>
+                                        <span class="error"
+                                              ng-show="serieSearch.serieUrl.$error.url">Debe ser una url</span>
+                                            <span class="error" ng-show="errorUrl != ''">{{errorUrl}}</span>
+                                        </md-input-container>
+                                        <md-button ng-disabled="!serieSearch.$valid"
+                                                   ng-click="searchSerie({serieUrl:serieUrl})"
+                                                   aria-label=""
+                                                   class="md-primary">
+                                            Buscar serie
+                                        </md-button>
+                                    </form>
+
+                                    <p class="negrita">** Sólo versión normal, no HD ni V.O.</p>
+                                </div>
+                            </md-tab-body>
+                        </md-tab>
+                        <md-tab>
+                            <md-tab-label>N1 Nuevo</md-tab-label>
+                            <md-tab-body>
+                                <div class="contenedor">
+                                    <p>Introduce el enlace de la serie **, desde la página de todos los capítulos
+                                        (http://www.nnnnnn1.com/series/nombre-de-la-serie/):</p>
+
+                                    <form name="serieSearch">
+                                        <md-input-container flex>
+                                            <label>URL de la serie</label>
+                                            <input type="url" name="serieUrl" ng-model="serieUrl" required>
+                                            <span class="error"
+                                                  ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie</span>
+                                        <span class="error"
+                                              ng-show="serieSearch.serieUrl.$error.url">Debe ser una url</span>
+                                            <span class="error" ng-show="errorUrl != ''">{{errorUrl}}</span>
+                                        </md-input-container>
+                                        <md-button ng-disabled="!serieSearch.$valid"
+                                                   ng-click="searchSerie({serieUrl:serieUrl})"
+                                                   aria-label=""
+                                                   class="md-primary center">
+                                            Buscar serie
+                                        </md-button>
+                                    </form>
+
+                                    <p class="negrita">** Sólo versión normal, no HD ni V.O.</p>
+                                </div>
+                            </md-tab-body>
+                        </md-tab>
+                    </md-tabs>
+                </md-tab-body>
+            </md-tab>
+
+            <!--<md-tab>
+                <md-tab-label>Servidor N</md-tab-label>
+                <md-tab-body>
+                    <md-tabs>
+                        <md-tab>
                             <md-tab-label>Series SD</md-tab-label>
                             <md-tab-body>
                                 <md-list-item ng-repeat="serie in servers[1].sd | orderBy: 'name'"
@@ -103,7 +168,7 @@
                         </md-tab>
                     </md-tabs>
                 </md-tab-body>
-            </md-tab>
+            </md-tab>-->
         </md-tabs>
     </md-content>
 

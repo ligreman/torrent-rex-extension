@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html ng-app="TorrentRex" ng-csp>
 <head>
-    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <meta charset="utf-8"/>
 </head>
 <body>
-    <p>Puedes exportar o importar tu historial de descargas para no perderlo si desinstalas la aplicación.</p>
+<h2 class="optionsH2">Configuración</h2>
 
-    <p id="exportar"><a id="linkExportar" download="" href="">Exportar series en descarga</a></p>
+<p>En caso de disponer de la serie en distintas calidades, elige cuál prefieres descargar:</p>
 
-    <p>Para importar un backup carga el fichero TRex a continuación:</p>
+<p><label>
+    <input id="lowQ" type="radio" name="quality" value="low"/> La más baja
+</label></p>
 
-    <input type="file" id="aImportar" name="files[]" accept="text/plain" />
-    <p style="color:red" id="importError"></p>
-    <p style="color:green" id="importOK"></p>
+<p><label>
+    <input id="highQ" type="radio" name="quality" value="high"/> La más alta
+</label></p>
 
-    <script src="js/tv4.min.js"></script>
-    <script src="js/options.js"></script>
+<h2 class="optionsH2">Importar / Exportar</h2>
+
+<p>Puedes exportar o importar tu historial de descargas para no perderlo si desinstalas la aplicación.</p>
+
+<p id="exportar"><a id="linkExportar" download="" href="">Exportar series en descarga</a></p>
+
+<p>Para importar un backup carga el fichero TRex a continuación:</p>
+
+<input type="file" id="aImportar" name="files[]" accept="text/plain"/>
+
+<p style="color:red" id="importError"></p>
+
+<p style="color:green" id="importOK"></p>
+
+<script src="js/tv4.min.js"></script>
+<script src="js/options.js"></script>
 </body>
 </html>
