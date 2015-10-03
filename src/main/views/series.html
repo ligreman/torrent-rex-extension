@@ -46,23 +46,32 @@
                                               ng-click="goto('chapters', serie.id, serie.name, 'SD', 'T')">
                                     <p> {{ serie.name }}</p>
                                 </md-list-item>
+                                <md-list-item ng-show="error500" class="md-warn">
+                                    <p>Error cargando la lista de series</p>
+                                </md-list-item>
                             </md-tab-body>
                         </md-tab>
                         <md-tab>
                             <md-tab-label>Series HD</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[0].hd | orderBy: 'name'"
+                                <md-list-item ng-repeat="serie in servers[0].hd | orderBy: 'name'" ng-hide="error500"
                                               ng-click="goto('chapters', serie.id, serie.name, 'HD', 'T')">
                                     <p> {{ serie.name }}</p>
+                                </md-list-item>
+                                <md-list-item ng-show="error500" class="md-warn">
+                                    <p>Error cargando la lista de series</p>
                                 </md-list-item>
                             </md-tab-body>
                         </md-tab>
                         <md-tab>
                             <md-tab-label>Series VO</md-tab-label>
                             <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[0].vo | orderBy: 'name'"
+                                <md-list-item ng-repeat="serie in servers[0].vo | orderBy: 'name'" ng-hide="error500"
                                               ng-click="goto('chapters', serie.id, serie.name, 'V.O.', 'T')">
                                     <p> {{ serie.name }}</p>
+                                </md-list-item>
+                                <md-list-item ng-show="error500" class="md-warn">
+                                    <p>Error cargando la lista de series</p>
                                 </md-list-item>
                             </md-tab-body>
                         </md-tab>
@@ -78,14 +87,21 @@
                             <md-tab-label>N Original</md-tab-label>
                             <md-tab-body>
                                 <div class="contenedor">
-                                    <p>Introduce el enlace de la serie **, desde la página de todos los capítulos
-                                        (http://www.nnnnnn.com/todos-los-capitulos/series/nombre-de-la-serie/):</p>
+                                    <p>Introduce el enlace de la serie **, desde la página de todos los capítulos:</p>
+
+                                    <p class="italic">
+                                        (http://www.nnnnnn.com/todos-los-capitulos/series/nombre-de-la-serie/)</p>
+
+                                    <p>o desde la de un capítulo</p>
+
+                                    <p class="italic">
+                                        (http://www.nnnnnn.com/descargar-serie/nombre-de-la-serie/capitulo...):</p>
 
                                     <form name="serieSearch">
                                         <md-input-container flex>
                                             <label>URL de la serie</label>
                                             <input type="url" name="serieUrl" ng-model="serieUrl" required>
-                                            <span class="error" ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie</span>
+                                            <span class="error" ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie. Asegurate que termina en /</span>
                                         <span class="error"
                                               ng-show="serieSearch.serieUrl.$error.url">Debe ser una url</span>
                                             <span class="error" ng-show="errorUrl != ''">{{errorUrl}}</span>
@@ -106,15 +122,16 @@
                             <md-tab-label>N1 Nuevo</md-tab-label>
                             <md-tab-body>
                                 <div class="contenedor">
-                                    <p>Introduce el enlace de la serie **, desde la página de todos los capítulos
-                                        (http://www.nnnnnn1.com/series/nombre-de-la-serie/):</p>
+                                    <p>Introduce el enlace de la serie **, desde la página de todos los capítulos</p>
+
+                                    <p class="italic">(http://www.nnnnnn1.com/series/nombre-de-la-serie/):</p>
 
                                     <form name="serieSearch">
                                         <md-input-container flex>
                                             <label>URL de la serie</label>
                                             <input type="url" name="serieUrl" ng-model="serieUrl" required>
                                             <span class="error"
-                                                  ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie</span>
+                                                  ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie. Asegurate que termina en /</span>
                                         <span class="error"
                                               ng-show="serieSearch.serieUrl.$error.url">Debe ser una url</span>
                                             <span class="error" ng-show="errorUrl != ''">{{errorUrl}}</span>

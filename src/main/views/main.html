@@ -34,7 +34,7 @@
                     <h3>
                         <md-button class="minimal" aria-label=""
                                    ng-click="goToSerie(serie.id, serie.title, serie.category, serie.source, 'main')">
-                            {{serie.title}} ({{serie.category}})
+                            [{{convertSource(serie.source)}}] {{serie.title}} ({{serie.category}})
                         </md-button>
                     </h3>
                 </div>

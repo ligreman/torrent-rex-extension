@@ -209,7 +209,7 @@ md-dialog p {
 }
 
 md-backdrop.md-opaque.md-default-theme, .md-dialog-container {
-    position: fixed;
+    /*position: fixed;*/
 }
 
 #popup md-toolbar.botonera {
@@ -271,3 +271,8 @@ md-backdrop.md-opaque.md-default-theme, .md-dialog-container {
 .optionsH2 {
     border-bottom: 1px solid #DDDDDD;
 }
+
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+

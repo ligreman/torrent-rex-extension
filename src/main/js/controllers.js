@@ -37,6 +37,12 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
             localStorage.setItem('series', JSON.stringify($scope.series));
         };
 
+        /*
+         patron: /(.*) - (Temp\.|Temporada )([0-9]+) \[([A-Z]+)\]\[([a-zA-Z\.0-9]+)\]\[(.+)\]/
+         title: Homeland - Temp.1 [HDTV][Cap.112 FINAL][Espa�ol Castellano]
+
+         */
+
         //Quitar una serie
         $scope.removeSerie = function (ev, serieTitle) {
             var confirm = $mdDialog.confirm()
@@ -164,7 +170,24 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
                     .ok('¡Me mola!')
                     .targetEvent(ev)
             );
-        }
+        };
+
+        //Converter
+        $scope.convertSource = function (fuente) {
+            "use strict";
+            switch (fuente) {
+                case 'N':
+                case 'SN':
+                    return 'NP';
+                    break;
+                case 'SN1':
+                    return 'NP1';
+                    break;
+                case 'T':
+                    return 'TXB';
+                    break;
+            }
+        };
     }]);
 
 //Controlador de la vista de lista de series
@@ -174,16 +197,31 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
         $scope.loading = true;
         $scope.serverCount = 0;
         $scope.selectedServer = 0;
+        $scope.error500 = false;
 
         //Si ya tengo categorías cargando no consulto al webservice
         if (constantes.series === undefined || constantes.series === null) {
             //Consulto el WS para obtener las categorï¿½as
-            $http.get(constantes.trex.urlSeries).
-                success(function (data) {
-                    $scope.servers = data.servers;
-                    $scope.loading = false;
-                    Constants.set('series', data.servers);
-                });
+            /*$http.get(constantes.trex.urlSeries).
+             success(function (data) {
+             $scope.servers = data.servers;
+             $scope.loading = false;
+             Constants.set('series', data.servers);
+             });*/
+
+            $http({
+                method: 'GET',
+                url: constantes.trex.urlSeries
+            }).then(function successCallback(response) {
+                console.log(response);
+                $scope.servers = response.data.servers;
+                $scope.loading = false;
+                $scope.error500 = false;
+                Constants.set('series', response.data.servers);
+            }, function errorCallback(response) {
+                $scope.loading = false;
+                $scope.error500 = true;
+            });
         } else {
             $scope.servers = constantes.series;
             $scope.loading = false;
@@ -194,16 +232,20 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
         $scope.searchSerie = function (url) {
             $scope.errorUrl = null;
 
-            var patt = /http:\/\/www\.[a-z]+\.com\/todos-los-capitulos\/series\/([a-zA-Z0-9-]+)\//,
-                patt1 = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-]+)\//;
+            var patt_A = /http:\/\/www\.[a-z]+\.com\/todos-los-capitulos\/series\/([a-zA-Z0-9-\.]+)\//,
+                patt_B = /http:\/\/www\.[a-z]+\.com\/descargar-serie\/([a-zA-Z0-9-\.]+)\/capitulo/,
+                patt1 = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-\.]+)\//;
 
-            var res = patt.exec(url.serieUrl),
+            var resA = patt_A.exec(url.serieUrl),
+                resB = patt_B.exec(url.serieUrl),
                 res1 = patt1.exec(url.serieUrl);
 
             var serie = '', clase = '';
 
-            if (res !== null) {
-                serie = res[1].trim();
+            if (resA !== null) {
+                serie = resA[1].trim();
+            } else if (resB !== null) {
+                serie = resB[1].trim();
             } else if (res1 !== null) {
                 serie = res1[1].trim();
                 clase = '1';
@@ -279,11 +321,20 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/dG9ycmVudHMucGhwP3Byb2Nlc2FyPTEmY2F0ZWdvcmlhcz0nU2VyaWVzJyZzdWJjYXRlZ29yaWE9MTg2NA==/T
         //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/torrents.php?procesar=1&categorias='Series'&subcategoria=1864/T
         //Petición de los torrents
-        $http.get(enlace).
-            success(function (data) {
-                $scope.loading = false;
-                $scope.info = torrentService.processTorrents(data);
-            });
+        /*$http.get(enlace).
+         success(function (data) {
+         $scope.loading = false;
+         $scope.info = torrentService.processTorrents(data);
+         });*/
+
+        $http({
+            method: 'GET',
+            url: enlace
+        }).then(function successCallback(response) {
+            $scope.loading = false;
+            $scope.info = torrentService.processTorrents(response.data);
+        }, function errorCallback(response) {
+        });
 
         //Descarga de un torrent
         $scope.download = function (torrentId) {
@@ -622,14 +673,26 @@ appControllers.controller('TorrentsCtrl', ['$scope', '$location', '$http', 'Cons
             $scope.maxPages = 0;
 
             //Consulto el WS para obtener las categorías
-            $http.get(constantes['trex'].urlSearch + '/' + btoa(term) + '/' + page).
-                success(function (data) {
-                    $scope.torrents = data.torrents;
-                    $scope.loading = false;
+            /*$http.get(constantes['trex'].urlSearch + '/' + btoa(term) + '/' + page).
+             success(function (data) {
+             $scope.torrents = data.torrents;
+             $scope.loading = false;
 
-                    $scope.maxPages = data.maxPages;
-                    $scope.currentPage = page;
-                });
+             $scope.maxPages = data.maxPages;
+             $scope.currentPage = page;
+             });*/
+
+            $http({
+                method: 'GET',
+                url: constantes['trex'].urlSearch + '/' + btoa(term) + '/' + page
+            }).then(function successCallback(response) {
+                $scope.torrents = response.data.torrents;
+                $scope.loading = false;
+
+                $scope.maxPages = response.data.maxPages;
+                $scope.currentPage = page;
+            }, function errorCallback(response) {
+            });
         };
 
         //Descarga de un torrent
