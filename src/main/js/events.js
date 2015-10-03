@@ -28,6 +28,9 @@ var constantes = {
     }
 };
 
+/**
+ * Llama al webservice para pedir las series y ver si hay nuevos capítulos
+ */
 function checkDownloads() {
     var status = (localStorage.getItem('trexStatus') === 'true'),
         series, newTorrents = [];
@@ -148,17 +151,16 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
     //Compruebo si hay cosas nuevas que descargar
     if (alarm.name === 'trex' || alarm.name === 'checkTrex') {
         checkDownloads();
+        //última comprobación
+        var d = new Date();
+        localStorage.setItem('lastCheck', formatTime(d.getHours()) + ':' + formatTime(d.getMinutes()));
+        logger("Guardo la hora de comprobación: " + d.getHours() + ':' + d.getMinutes());
     }
 
     //Descargo ficheros
     if (alarm.name === 'downloadTrex') {
         processDownloads();
     }
-
-    //última comprobación
-    var d = new Date();
-    localStorage.setItem('lastCheck', formatTime(d.getHours()) + ':' + formatTime(d.getMinutes()));
-    logger("Guardo la hora de comprobación: " + d.getHours() + ':' + d.getMinutes());
 });
 
 //Al iniciar navegador compruebo (le doy un minuto)
@@ -215,8 +217,6 @@ function processDownloads() {
 
     descargas.forEach(function (torrent) {
         timer++;
-
-        logger('Descarga programada ' + timer);
 
         if (timer <= max_downloads) {
             setTimeout(function () {
@@ -280,10 +280,11 @@ function downloadsRemoveOK(correctos) {
     //Al terminar guardo
     localStorage.setItem('downloads', JSON.stringify(restantes));
 
-    //Si quedan restantes, programo otra descarga
+    //Si quedan restantes, programo otra descarga de ficheros torrent
     if (restantes.length > 0) {
-        chrome.alarms.create('checkTrex', {
-            delayInMinutes: 5
+        logger("Programo otra descarga de Torrents para dentro de 1 minuto");
+        chrome.alarms.create('downloadTrex', {
+            delayInMinutes: 1
         });
     }
 }
