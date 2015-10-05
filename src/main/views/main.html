@@ -28,7 +28,7 @@
 
     <md-content id="main" class="header-spacing footer-spacing">
         <h3 class="center" ng-show="series.length == 0">Añade series para su descarga automática.</h3>
-        <md-card ng-repeat="serie in series track by serie.id">
+        <md-card ng-repeat="serie in series | orderBy: 'title' track by serie.id">
             <div layout="row" ng-class="(serie.active)?'serie-enabled':'serie-disabled'">
                 <div flex="75">
                     <h3>

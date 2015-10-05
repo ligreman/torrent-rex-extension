@@ -234,7 +234,7 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
 
             var patt_A = /http:\/\/www\.[a-z]+\.com\/todos-los-capitulos\/series\/([a-zA-Z0-9-\.]+)\//,
                 patt_B = /http:\/\/www\.[a-z]+\.com\/descargar-serie\/([a-zA-Z0-9-\.]+)\/capitulo/,
-                patt1 = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-\.]+)\//;
+                patt1  = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-\.]+)\//;
 
             var resA = patt_A.exec(url.serieUrl),
                 resB = patt_B.exec(url.serieUrl),
@@ -540,7 +540,7 @@ function updateSerieData(newSerie, titulo) {
 //Añade series a descarga
 function addSerieDownload($scope, answer) {
     //La añado a las ya existentes
-    var yaExiste = false,
+    var yaExiste     = false,
         actualSeries = JSON.parse(localStorage.getItem('series'));
 
     if (actualSeries === null || actualSeries === undefined) {
