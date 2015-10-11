@@ -15,7 +15,7 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
         //Calidad por defecto
         var q = localStorage.getItem('quality');
         if (!q || (q !== 'low' && q !== 'high')) {
-            localStorage.setItem('low');
+            localStorage.setItem('quality', 'low');
         }
 
         //Borro la lista de series
