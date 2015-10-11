@@ -1,7 +1,7 @@
 "use strict";
 
 //Logger
-var DEBUG_MODE = true, version = '2.0.0';
+var DEBUG_MODE = false, version = '2.0.0';
 function logger(msg) {
     if (DEBUG_MODE) {
         console.log(msg);
@@ -32,7 +32,7 @@ var constantes = {
  * Llama al webservice para pedir las series y ver si hay nuevos capítulos
  */
 function checkDownloads() {
-    var status = (localStorage.getItem('trexStatus') === 'true'),
+    var status              = (localStorage.getItem('trexStatus') === 'true'),
         series, newTorrents = [];
 
     logger("Comienzo la comprobación de descargas");
@@ -56,7 +56,7 @@ function checkDownloads() {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onload = function () {
                 if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                    var data = JSON.parse(xmlhttp.responseText),
+                    var data                   = JSON.parse(xmlhttp.responseText),
                         season, lastSeasonReal = serie.lastSeason, lastChapterReal = serie.lastChapter;
 
                     for (var seasonKey in data.torrents) {
@@ -107,7 +107,7 @@ function checkDownloads() {
         if (newTorrents !== null) {
             //Voy una a una bajando y generando notificación
             var notifications = JSON.parse(localStorage.getItem('notifications')),
-                downloads = JSON.parse(localStorage.getItem('downloads'));
+                downloads     = JSON.parse(localStorage.getItem('downloads'));
 
             logger("  Lo nuevo es:");
             logger(newTorrents);
@@ -201,7 +201,7 @@ function formatTime(tt) {
 
 //Descarga los torrents de la cola
 function processDownloads() {
-    var descargas = JSON.parse(localStorage.getItem('downloads')),
+    var descargas     = JSON.parse(localStorage.getItem('downloads')),
         notifications = JSON.parse(localStorage.getItem('notifications'));
 
     if (descargas === null) {
@@ -227,12 +227,12 @@ function processDownloads() {
 
                         var m = new Date();
                         var dateString =
-                            ("0" + m.getUTCDate()).slice(-2) + "/" +
-                            ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
-                            m.getUTCFullYear() + " " +
-                            ("0" + m.getUTCHours()).slice(-2) + ":" +
-                            ("0" + m.getUTCMinutes()).slice(-2) + ":" +
-                            ("0" + m.getUTCSeconds()).slice(-2);
+                                ("0" + m.getUTCDate()).slice(-2) + "/" +
+                                ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
+                                m.getUTCFullYear() + " " +
+                                ("0" + m.getUTCHours()).slice(-2) + ":" +
+                                ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+                                ("0" + m.getUTCSeconds()).slice(-2);
 
                         //Meto notificación
                         notifications.push({
