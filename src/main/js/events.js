@@ -1,7 +1,7 @@
 "use strict";
 
 //Logger
-var DEBUG_MODE = false, version = '2.1.0';
+var DEBUG_MODE = false, version = '2.1.1';
 function logger(msg) {
     if (DEBUG_MODE) {
         console.log(msg);

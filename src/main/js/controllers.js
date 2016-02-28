@@ -251,7 +251,7 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
         $scope.searchSerie = function (url) {
             $scope.errorUrl = null;
 
-            var patt_A = /(http:\/\/www.[a-z]+.com\/)(descargar-serie(hd|vo)?|todos-los-capitulos\/series)\/([A-Za-z0-9]+)/g,
+            var patt_A = /(http:\/\/www.[a-z]+.com\/)(descargar-serie(hd|vo)?|todos-los-capitulos\/series)\/([A-Za-z0-9-]+)/g,
                 patt1 = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-\.]+)\//;
 
             var resA = patt_A.exec(url.serieUrl),
@@ -562,7 +562,7 @@ function addSerieDownload($scope, answer) {
     //Compruebo que la serie no está ya añadida
     for (var i = 0; i < actualSeries.length; i++) {
         //if (actualSeries[i].title === $scope.title && actualSeries[i].category === $scope.category) {
-        if (actualSeries[i].title === $scope.title && actualSeries[i].category === $scope.category) {
+        if (actualSeries[i].id === $scope.idSerie) {
             //Error serie ya existe
             $scope.showSimpleToast('La serie ya está descargándose.');
             yaExiste = true;
