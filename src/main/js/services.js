@@ -4,7 +4,7 @@ var appServices = angular.module('appServices', []);
 
 appServices.service('paramService', function () {
     var id = '', url = '', title = '', source = '', exclusionInfo, category = '',
-        seasonLimits = {}, chapterLimits = {}, lastPage = '';
+        seasonLimits                                                        = {}, chapterLimits                                    = {}, lastPage = '';
 
     var setId = function (newId) {
         id = newId
@@ -110,9 +110,9 @@ appServices.service('paramService', function () {
 appServices.service('torrentService', function () {
     var processTorrents = function processTorrents(data) {
         var seasonChapters, metadata, aux,
-            ultimaTemporada = 0, temporadas = [],
+            ultimaTemporada                       = 0, temporadas = [],
             temps = [], chaps = [], idiomaGeneral = '',
-            listaTorrents = data.torrents;
+            listaTorrents                         = data.torrents;
 
         //Saco los excluidos
         var seriesActuales = JSON.parse(localStorage.getItem('series')), excluded = [];
@@ -129,6 +129,7 @@ appServices.service('torrentService', function () {
 
         //Los metadatos de la serie
         metadata = data.metadata;
+        var idSerie = data.id;
 
         //Recorro los torrents y voy extrayendo su metainformación
         for (var season in listaTorrents) {
@@ -139,7 +140,7 @@ appServices.service('torrentService', function () {
                     console.log("Chapter:");
                     console.log(chapter);
                     //Miro a ver si está excluido
-                    if (excluded.indexOf(chapter.id) === -1) {
+                    if (excluded.indexOf(chapter._id) === -1) {
                         //Genero la lista de capítulos de esta temporada
                         if (temporadas[season] === undefined) {
                             temporadas[season] = [];
@@ -147,7 +148,7 @@ appServices.service('torrentService', function () {
 
                         temporadas[season][chapter.chapter] = {
                             title: chapter.title,
-                            id: chapter.id,
+                            id: chapter._id,
                             torrentId: chapter.torrentId,
                             chapter: chapter.chapter,
                             language: chapter.language,
@@ -183,6 +184,7 @@ appServices.service('torrentService', function () {
         var ulti = metadata.seasonsDetail[metadata.lastSeason];
 
         return {
+            idSerie: idSerie,
             lastSeason: metadata.lastSeason,
             lastChapter: (ulti === undefined) ? 0 : ulti.lastChapter,
             language: idiomaGeneral,
@@ -199,10 +201,13 @@ appServices.service('torrentService', function () {
 appServices.service('Constants', function () {
     var constantes = {
         trex: {
-            urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
-            urlSearchSerie: 'http://trex-lovehinaesp.rhcloud.com/api/trex/searchserie',
-            urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
-            urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
+            //urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
+            //urlSearchSerie: 'http://trex-lovehinaesp.rhcloud.com/api/trex/searchserie',
+            //urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
+            //urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
+            urlGetSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/serie',
+            urlAddSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/addSerie',
+            urlDownloadTorrent: 'http://trex2-crystaltales.rhcloud.com/api/trex/download'
             //urlSeries: 'http://localhost/api/trex/series',
             //urlSearchSerie: 'http://localhost/api/trex/searchserie',
             //urlSearch: 'http://localhost/api/trex/search',

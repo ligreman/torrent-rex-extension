@@ -1,7 +1,7 @@
 "use strict";
 
 //Logger
-var DEBUG_MODE = false, version = '2.0.0';
+var DEBUG_MODE = false, version = '2.1.0';
 function logger(msg) {
     if (DEBUG_MODE) {
         console.log(msg);
@@ -19,9 +19,12 @@ if (localVersion !== null) {
 
 var constantes = {
     trex: {
-        urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
-        urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
-        urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
+        //urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
+        //urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
+        //urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
+        urlGetSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/serie',
+        urlAddSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/addSerie',
+        urlDownloadTorrent: 'http://trex2-crystaltales.rhcloud.com/api/trex/download'
         //urlSeries: 'http://localhost/api/trex/series',
         //urlSearch: 'http://localhost/api/trex/search',
         //urlDownloadTorrent: 'http://localhost/api/trex/download'
@@ -32,7 +35,7 @@ var constantes = {
  * Llama al webservice para pedir las series y ver si hay nuevos capítulos
  */
 function checkDownloads() {
-    var status              = (localStorage.getItem('trexStatus') === 'true'),
+    var status = (localStorage.getItem('trexStatus') === 'true'),
         series, newTorrents = [];
 
     logger("Comienzo la comprobación de descargas");
@@ -56,7 +59,7 @@ function checkDownloads() {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onload = function () {
                 if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                    var data                   = JSON.parse(xmlhttp.responseText),
+                    var data = JSON.parse(xmlhttp.responseText),
                         season, lastSeasonReal = serie.lastSeason, lastChapterReal = serie.lastChapter;
 
                     for (var seasonKey in data.torrents) {
@@ -72,7 +75,7 @@ function checkDownloads() {
                                     if (thisChapter.chapter > serie.lastChapter) {
                                         //Lo añado a la lista de descargas
                                         newTorrents.push({
-                                            id: thisChapter.id,
+                                            id: thisChapter._id,
                                             title: thisChapter.title,
                                             serie: serie.id
                                         });
@@ -98,7 +101,7 @@ function checkDownloads() {
             };
 
             //Ha de ser síncrono, con el false, para que luego se ejecute lo siguiente
-            xmlhttp.open("GET", constantes['trex'].urlSeries + '/' + serie.id, false);
+            xmlhttp.open("GET", constantes['trex'].urlGetSerie + '/' + serie.id, false);
             xmlhttp.send();
 
         });
@@ -107,7 +110,7 @@ function checkDownloads() {
         if (newTorrents !== null) {
             //Voy una a una bajando y generando notificación
             var notifications = JSON.parse(localStorage.getItem('notifications')),
-                downloads     = JSON.parse(localStorage.getItem('downloads'));
+                downloads = JSON.parse(localStorage.getItem('downloads'));
 
             logger("  Lo nuevo es:");
             logger(newTorrents);
@@ -201,7 +204,7 @@ function formatTime(tt) {
 
 //Descarga los torrents de la cola
 function processDownloads() {
-    var descargas     = JSON.parse(localStorage.getItem('downloads')),
+    var descargas = JSON.parse(localStorage.getItem('downloads')),
         notifications = JSON.parse(localStorage.getItem('notifications'));
 
     if (descargas === null) {
@@ -227,12 +230,12 @@ function processDownloads() {
 
                         var m = new Date();
                         var dateString =
-                                ("0" + m.getUTCDate()).slice(-2) + "/" +
-                                ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
-                                m.getUTCFullYear() + " " +
-                                ("0" + m.getUTCHours()).slice(-2) + ":" +
-                                ("0" + m.getUTCMinutes()).slice(-2) + ":" +
-                                ("0" + m.getUTCSeconds()).slice(-2);
+                            ("0" + m.getUTCDate()).slice(-2) + "/" +
+                            ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
+                            m.getUTCFullYear() + " " +
+                            ("0" + m.getUTCHours()).slice(-2) + ":" +
+                            ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+                            ("0" + m.getUTCSeconds()).slice(-2);
 
                         //Meto notificación
                         notifications.push({

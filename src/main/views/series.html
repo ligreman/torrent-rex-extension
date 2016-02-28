@@ -16,6 +16,29 @@
             <md-progress-circular class="md-primary center" md-mode="indeterminate"></md-progress-circular>
         </div>
 
+        <div class="contenedor" ng-hide="loading">
+            <p>Introduce el enlace de la serie desde un episodio de la misma o desde la página de todos los
+                capítulos:</p>
+
+            <form name="serieSearch">
+                <md-input-container flex>
+                    <label>URL de la serie</label>
+                    <input type="url" name="serieUrl" ng-model="serieUrl" required>
+                    <span class="error"
+                          ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie.</span>
+                    <span class="error"
+                          ng-show="serieSearch.serieUrl.$error.url">Debe ser una url</span>
+                    <span class="error" ng-show="errorUrl != ''">{{errorUrl}}</span>
+                </md-input-container>
+                <md-button ng-disabled="!serieSearch.$valid"
+                           ng-click="searchSerie({serieUrl:serieUrl})"
+                           aria-label=""
+                           class="md-primary">
+                    Buscar serie
+                </md-button>
+            </form>
+        </div>
+
         <!--<section ng-repeat="category in categories | filter:{title:'Series'}" ng-hide="loading">
             <md-subheader class="md-primary custom">{{category.title}}</md-subheader>
             <md-list layout="column">
@@ -34,7 +57,7 @@
             </md-list>
         </section>-->
 
-        <md-tabs id="pestanas" class="md-hue-3" ng-hide="loading">
+        <!--<md-tabs id="pestanas" class="md-hue-3" ng-hide="loading">
             <md-tab>
                 <md-tab-label>Servidor T</md-tab-label>
                 <md-tab-body>
@@ -150,43 +173,43 @@
                         </md-tab>
                     </md-tabs>
                 </md-tab-body>
-            </md-tab>
-
-            <!--<md-tab>
-                <md-tab-label>Servidor N</md-tab-label>
-                <md-tab-body>
-                    <md-tabs>
-                        <md-tab>
-                            <md-tab-label>Series SD</md-tab-label>
-                            <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[1].sd | orderBy: 'name'"
-                                              ng-click="goto('chapters', serie.id, serie.name, 'SD', 'N')">
-                                    <p> {{ serie.name }}</p>
-                                </md-list-item>
-                            </md-tab-body>
-                        </md-tab>
-                        <md-tab>
-                            <md-tab-label>Series HD</md-tab-label>
-                            <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[1].hd | orderBy: 'name'"
-                                              ng-click="goto('chapters', serie.id, serie.name, 'HD', 'N')">
-                                    <p> {{ serie.name }}</p>
-                                </md-list-item>
-                            </md-tab-body>
-                        </md-tab>
-                        <md-tab>
-                            <md-tab-label>Series VO</md-tab-label>
-                            <md-tab-body>
-                                <md-list-item ng-repeat="serie in servers[1].vo | orderBy: 'name'"
-                                              ng-click="goto('chapters', serie.id, serie.name, 'V.O.', 'N')">
-                                    <p> {{ serie.name }}</p>
-                                </md-list-item>
-                            </md-tab-body>
-                        </md-tab>
-                    </md-tabs>
-                </md-tab-body>
             </md-tab>-->
-        </md-tabs>
+
+        <!--<md-tab>
+            <md-tab-label>Servidor N</md-tab-label>
+            <md-tab-body>
+                <md-tabs>
+                    <md-tab>
+                        <md-tab-label>Series SD</md-tab-label>
+                        <md-tab-body>
+                            <md-list-item ng-repeat="serie in servers[1].sd | orderBy: 'name'"
+                                          ng-click="goto('chapters', serie.id, serie.name, 'SD', 'N')">
+                                <p> {{ serie.name }}</p>
+                            </md-list-item>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab>
+                        <md-tab-label>Series HD</md-tab-label>
+                        <md-tab-body>
+                            <md-list-item ng-repeat="serie in servers[1].hd | orderBy: 'name'"
+                                          ng-click="goto('chapters', serie.id, serie.name, 'HD', 'N')">
+                                <p> {{ serie.name }}</p>
+                            </md-list-item>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab>
+                        <md-tab-label>Series VO</md-tab-label>
+                        <md-tab-body>
+                            <md-list-item ng-repeat="serie in servers[1].vo | orderBy: 'name'"
+                                          ng-click="goto('chapters', serie.id, serie.name, 'V.O.', 'N')">
+                                <p> {{ serie.name }}</p>
+                            </md-list-item>
+                        </md-tab-body>
+                    </md-tab>
+                </md-tabs>
+            </md-tab-body>
+        </md-tab>-->
+        <!--</md-tabs>-->
     </md-content>
 
 </div>

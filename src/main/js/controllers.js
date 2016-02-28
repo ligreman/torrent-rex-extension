@@ -96,7 +96,7 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
         $scope.goToSerie = function (param, name, category, source, quien) {
             paramService.setId(param); //serie id
             paramService.setTitle(name); //serie name
-            paramService.setSource(source); //N T
+            paramService.setSource('custom');
             paramService.setLastPage(quien);
             paramService.setCategory(category);
             $location.path('/chapters');
@@ -180,6 +180,7 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
                 case 'SN':
                     return 'NP';
                     break;
+                case 'N1':
                 case 'SN1':
                     return 'NP1';
                     break;
@@ -194,67 +195,68 @@ appControllers.controller('MainCtrl', ['$scope', '$route', '$location', '$http',
 appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramService', 'Constants',
     function ($scope, $location, $http, paramService, Constants) {
         var constantes = Constants.get();
-        $scope.loading = true;
+        //$scope.loading = true;
         $scope.serverCount = 0;
         $scope.selectedServer = 0;
         $scope.error500 = false;
 
         //Si ya tengo categorías cargando no consulto al webservice
-        if (constantes.series === undefined || constantes.series === null) {
-            //Consulto el WS para obtener las categorï¿½as
-            /*$http.get(constantes.trex.urlSeries).
-             success(function (data) {
-             $scope.servers = data.servers;
-             $scope.loading = false;
-             Constants.set('series', data.servers);
-             });*/
+        /*if (constantes.series === undefined || constantes.series === null) {
+         //Consulto el WS para obtener las categorï¿½as
+         /!*$http.get(constantes.trex.urlSeries).
+         success(function (data) {
+         $scope.servers = data.servers;
+         $scope.loading = false;
+         Constants.set('series', data.servers);
+         });*!/
 
-            $http({
-                method: 'GET',
-                url: constantes.trex.urlSeries
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.servers = response.data.servers;
-                $scope.loading = false;
-                $scope.error500 = false;
-                Constants.set('series', response.data.servers);
-            }, function errorCallback(response) {
-                $scope.loading = false;
-                $scope.error500 = true;
-            });
-        } else {
-            $scope.servers = constantes.series;
-            $scope.loading = false;
-        }
+         $http({
+         method: 'GET',
+         url: constantes.trex.urlSeries
+         }).then(function successCallback(response) {
+         console.log(response);
+         $scope.servers = response.data.servers;
+         $scope.loading = false;
+         $scope.error500 = false;
+         Constants.set('series', response.data.servers);
+         }, function errorCallback(response) {
+         $scope.loading = false;
+         $scope.error500 = true;
+         });
+         } else {
+         $scope.servers = constantes.series;
+         $scope.loading = false;
+
+         http://www.newpct.com/descargar-serie/gotham/capitulo-211/
+         }*/
 
         $scope.errorUrl = null;
         //Función que valida la url de la serie a buscar
         $scope.searchSerie = function (url) {
             $scope.errorUrl = null;
 
-            var patt_A = /http:\/\/www\.[a-z]+\.com\/todos-los-capitulos\/series\/([a-zA-Z0-9-\.]+)\//,
-                patt_B = /http:\/\/www\.[a-z]+\.com\/descargar-serie\/([a-zA-Z0-9-\.]+)\/capitulo/,
+            var patt_A = /(http:\/\/www.[a-z]+.com\/)(descargar-serie(hd|vo)?|todos-los-capitulos\/series)\/([A-Za-z0-9]+)/g,
                 patt1  = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-\.]+)\//;
 
             var resA = patt_A.exec(url.serieUrl),
-                resB = patt_B.exec(url.serieUrl),
                 res1 = patt1.exec(url.serieUrl);
 
-            var serie = '', clase = '';
+            var serie = '', clase = '', serieUrl = '';
 
             if (resA !== null) {
-                serie = resA[1].trim();
-            } else if (resB !== null) {
-                serie = resB[1].trim();
+                serie = resA[4].trim();
+                // Elimino el dominio
+                serieUrl = url.serieUrl.replace(resA[1], '');
             } else if (res1 !== null) {
                 serie = res1[1].trim();
                 clase = '1';
             }
 
+
             if (serie !== '') {
                 var namecito = capitalize(serie);
 
-                $scope.goto('chapters', serie, namecito, 'SD', 'SN' + clase)
+                $scope.goto('chapters', serieUrl, namecito, 'SD', 'N' + clase)
             } else {
                 $scope.errorUrl = 'Introduce una url válida';
             }
@@ -285,7 +287,7 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         $scope.fromChapter = 0;
 
         //ID y título de la serie. El título no tiene metainformación
-        $scope.idSerie = paramService.getId();
+        $scope.urlSerie = paramService.getId();
         $scope.category = paramService.getCategory();
         $scope.title = paramService.getTitle();
         $scope.lastPage = paramService.getLastPage();
@@ -307,25 +309,18 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
             );
         };
 
-        var enlace = '', quality = localStorage.getItem('quality');
-        if (!quality || (quality !== 'low' && quality !== 'high')) {
-            quality = 'low';
-        }
+        var enlace = '';
+        /*, quality = localStorage.getItem('quality');
+         if (!quality || (quality !== 'low' && quality !== 'high')) {
+         quality = 'low';
+         }*/
 
-        if ($scope.source === 'SN' || $scope.source === 'SN1') {
-            enlace = constantes.trex.urlSearchSerie + '/' + $scope.source + '/' + $scope.idSerie + '/' + quality;
+        if ($scope.source === 'N' || $scope.source === 'N1') {
+            enlace = constantes.trex.urlAddSerie + '/' + $scope.source + '/' + btoa($scope.urlSerie) + '/' + btoa($scope.title);
         } else {
-            enlace = constantes.trex.urlSeries + '/' + $scope.idSerie + '/' + quality;
+            // En este caso en urlSerie viene el id
+            enlace = constantes.trex.urlGetSerie + '/' + $scope.urlSerie;
         }
-
-        //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/dG9ycmVudHMucGhwP3Byb2Nlc2FyPTEmY2F0ZWdvcmlhcz0nU2VyaWVzJyZzdWJjYXRlZ29yaWE9MTg2NA==/T
-        //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/torrents.php?procesar=1&categorias='Series'&subcategoria=1864/T
-        //Petición de los torrents
-        /*$http.get(enlace).
-         success(function (data) {
-         $scope.loading = false;
-         $scope.info = torrentService.processTorrents(data);
-         });*/
 
         $http({
             method: 'GET',
@@ -333,6 +328,7 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         }).then(function successCallback(response) {
             $scope.loading = false;
             $scope.info = torrentService.processTorrents(response.data);
+            $scope.idSerie = $scope.info.idSerie;
         }, function errorCallback(response) {
         });
 
@@ -425,7 +421,7 @@ appControllers.controller('ChaptersCtrl', ['$scope', '$location', '$http', '$mdD
         };
 
         //Añadir directamente
-        $scope.addDirectly = function (answer) {
+        $scope.addDirectly = function (id, answer) {
             addSerieDownload($scope, answer);
         };
 
@@ -549,6 +545,7 @@ function addSerieDownload($scope, answer) {
 
     //Compruebo que la serie no está ya añadida
     for (var i = 0; i < actualSeries.length; i++) {
+        //if (actualSeries[i].title === $scope.title && actualSeries[i].category === $scope.category) {
         if (actualSeries[i].title === $scope.title && actualSeries[i].category === $scope.category) {
             //Error serie ya existe
             $scope.showSimpleToast('La serie ya está descargándose.');

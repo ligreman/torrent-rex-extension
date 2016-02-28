@@ -166,9 +166,9 @@ module.exports = function (grunt) {
         // Reads HTML for usemin blocks to enable smart builds that automatically
         // concat, minify and revision files. Creates configurations in memory so
         // additional tasks can operate on them
-        useminPrepare: {            
+        useminPrepare: {
             html: '<%= config.app %>/index.html',
-			options: {
+            options: {
                 dest: '<%= config.dist %>'
             }
         },
@@ -289,13 +289,6 @@ module.exports = function (grunt) {
             'jscs:all'
         ]);
     });
-
-
-    // Change version
-    grunt.registerTask('version', [
-        'prompt:version',
-        'replace:version'
-    ]);
 
     // simple build task
     grunt.registerTask('build', [
