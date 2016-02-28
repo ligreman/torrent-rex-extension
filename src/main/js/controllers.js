@@ -231,12 +231,28 @@ appControllers.controller('SeriesCtrl', ['$scope', '$location', '$http', 'paramS
          }*/
 
         $scope.errorUrl = null;
+        $scope.serieUrlForm = '';
+
+        // Si la tab current es de N cargo la url por defecto
+        //aHR0cDovL3d3dy5uZXdwY3QuY29tLw==
+        chrome.tabs.query({active: true, currentWindow: true}, function (arrayTabs) {
+            "use strict";
+            if (arrayTabs.length === 1) {
+                var tab = arrayTabs[0];
+
+                // A ver si estoy en N
+                if (tab.url.indexOf(atob('aHR0cDovL3d3dy5uZXdwY3QuY29tLw==')) !== -1) {
+                    $scope.serieUrlForm = tab.url;
+                }
+            }
+        });
+
         //Función que valida la url de la serie a buscar
         $scope.searchSerie = function (url) {
             $scope.errorUrl = null;
 
             var patt_A = /(http:\/\/www.[a-z]+.com\/)(descargar-serie(hd|vo)?|todos-los-capitulos\/series)\/([A-Za-z0-9]+)/g,
-                patt1  = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-\.]+)\//;
+                patt1 = /http:\/\/www\.[a-z1]+\.com\/series\/([a-zA-Z0-9-\.]+)\//;
 
             var resA = patt_A.exec(url.serieUrl),
                 res1 = patt1.exec(url.serieUrl);
@@ -536,7 +552,7 @@ function updateSerieData(newSerie, titulo) {
 //Añade series a descarga
 function addSerieDownload($scope, answer) {
     //La añado a las ya existentes
-    var yaExiste     = false,
+    var yaExiste = false,
         actualSeries = JSON.parse(localStorage.getItem('series'));
 
     if (actualSeries === null || actualSeries === undefined) {

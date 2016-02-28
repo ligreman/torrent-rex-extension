@@ -23,7 +23,7 @@
             <form name="serieSearch">
                 <md-input-container flex>
                     <label>URL de la serie</label>
-                    <input type="url" name="serieUrl" ng-model="serieUrl" required>
+                    <input type="url" name="serieUrl" ng-model="serieUrlForm" required>
                     <span class="error"
                           ng-show="serieSearch.serieUrl.$error.required">Introduce la url de la serie.</span>
                     <span class="error"
@@ -31,7 +31,7 @@
                     <span class="error" ng-show="errorUrl != ''">{{errorUrl}}</span>
                 </md-input-container>
                 <md-button ng-disabled="!serieSearch.$valid"
-                           ng-click="searchSerie({serieUrl:serieUrl})"
+                           ng-click="searchSerie({serieUrl:serieUrlForm})"
                            aria-label=""
                            class="md-primary">
                     Buscar serie
