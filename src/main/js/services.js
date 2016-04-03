@@ -4,7 +4,7 @@ var appServices = angular.module('appServices', []);
 
 appServices.service('paramService', function () {
     var id = '', url = '', title = '', source = '', exclusionInfo, category = '',
-        seasonLimits                                                        = {}, chapterLimits                                    = {}, lastPage = '';
+        seasonLimits = {}, chapterLimits = {}, lastPage = '';
 
     var setId = function (newId) {
         id = newId
@@ -110,9 +110,9 @@ appServices.service('paramService', function () {
 appServices.service('torrentService', function () {
     var processTorrents = function processTorrents(data) {
         var seasonChapters, metadata, aux,
-            ultimaTemporada                       = 0, temporadas = [],
+            ultimaTemporada = 0, temporadas = [],
             temps = [], chaps = [], idiomaGeneral = '',
-            listaTorrents                         = data.torrents;
+            listaTorrents = data.torrents;
 
         //Saco los excluidos
         var seriesActuales = JSON.parse(localStorage.getItem('series')), excluded = [];
@@ -203,15 +203,15 @@ appServices.service('Constants', function () {
         trex: {
             //urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
             //urlSearchSerie: 'http://trex-lovehinaesp.rhcloud.com/api/trex/searchserie',
-            //urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
-            //urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
+            urlSearch: 'http://trex2-crystaltales.rhcloud.com/api/trex/search',
+            urlDownloadSearchTorrent: 'http://trex2-crystaltales.rhcloud.com/api/trex/downloadTorrent',
             urlGetSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/serie',
             urlAddSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/addSerie',
             urlDownloadTorrent: 'http://trex2-crystaltales.rhcloud.com/api/trex/download'
             //urlSeries: 'http://localhost/api/trex/series',
             //urlSearchSerie: 'http://localhost/api/trex/searchserie',
-            //urlSearch: 'http://localhost/api/trex/search',
-            //urlDownloadTorrent: 'http://localhost/api/trex/download'
+            // urlSearch: 'http://localhost/api/trex/search',
+            // urlDownloadSearchTorrent: 'http://localhost/api/trex/downloadTorrent'
         }
     };
 

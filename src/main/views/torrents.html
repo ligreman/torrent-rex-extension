@@ -28,7 +28,7 @@
         </div>
 
         <!-- Paginación -->
-        <div ng-hide="maxPages <= 0" layout="row">
+        <!--<div ng-hide="maxPages <= 0" layout="row">
             <md-button class="md-button" ng-click="search(searchTerm, currentPage-1)"
                        ng-disabled="currentPage <= 1"
                        aria-label="" flex> Anterior
@@ -38,7 +38,7 @@
                        ng-disabled="currentPage >= maxPages"
                        aria-label="" flex> Siguiente
             </md-button>
-        </div>
+        </div>-->
 
         <section ng-hide="loading || (!loading && currentPage==0)">
             <md-card ng-repeat="torrent in torrents">
@@ -46,14 +46,12 @@
                     <h3>{{torrent.title}}</h3>
                 </div>
                 <md-card-content>
-                    <div layout="row">
-                        <div flex>Idioma: {{torrent.language}}</div>
-                        <div flex>Tamaño: {{torrent.size}}</div>
-                    </div>
-
                     <div layout="row" layout-align="space-between">
-                        <p><em>{{torrent.category}}</em></p>
-                        <md-button class="md-primary" ng-click="download(torrent.id)" aria-label="">
+                        <div flex layout="column">
+                            <div flex>Fecha: {{torrent.date}}</div>
+                            <div flex>Tamaño: {{torrent.size}}</div>
+                        </div>
+                        <md-button class="md-primary" ng-click="download(torrent.url)" aria-label="" flex="none">
                             Torrent
                         </md-button>
                     </div>
@@ -64,7 +62,7 @@
         </section>
 
         <!-- Paginación -->
-        <div ng-hide="maxPages <= 0" layout="row">
+        <!--<div ng-hide="maxPages <= 0" layout="row">
             <md-button class="md-button" ng-click="search(searchTerm, currentPage-1)"
                        ng-disabled="currentPage <= 1"
                        aria-label="" flex> Anterior
@@ -74,7 +72,7 @@
                        ng-disabled="currentPage >= maxPages"
                        aria-label="" flex> Siguiente
             </md-button>
-        </div>
+        </div>-->
     </md-content>
 
 </div>

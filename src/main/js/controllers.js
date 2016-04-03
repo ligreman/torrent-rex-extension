@@ -697,9 +697,9 @@ appControllers.controller('TorrentsCtrl', ['$scope', '$location', '$http', 'Cons
 
             $http({
                 method: 'GET',
-                url: constantes['trex'].urlSearch + '/' + btoa(term) + '/' + page
+                url: constantes['trex'].urlSearch + '/' + btoa(term)
             }).then(function successCallback(response) {
-                $scope.torrents = response.data.torrents;
+                $scope.torrents = response.data.search;
                 $scope.loading = false;
 
                 $scope.maxPages = response.data.maxPages;
@@ -709,8 +709,8 @@ appControllers.controller('TorrentsCtrl', ['$scope', '$location', '$http', 'Cons
         };
 
         //Descarga de un torrent
-        $scope.download = function (torrentId) {
-            downloadTorrent(constantes['trex'].urlDownloadTorrent + '/' + torrentId);
+        $scope.download = function (torrentUrl) {
+            downloadTorrent(constantes['trex'].urlDownloadSearchTorrent + '/' + torrentUrl);
         };
 
         //GoTo
