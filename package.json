@@ -1,7 +1,7 @@
 {
     "author": "Ligreman",
     "name": "webapp-template-html",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "descVersion": "Cambiar la version aquí, en options y manifest",
     "description": "HTML scaffolding template for development of web applications.",
     "keywords": [
