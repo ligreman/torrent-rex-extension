@@ -66,13 +66,22 @@ function checkDownloads() {
                         if (data.torrents.hasOwnProperty(seasonKey)) {
                             season = data.torrents[seasonKey];
                             seasonKey = parseInt(seasonKey);
+                            var newSeason = false;
+
+                            //Si la temporada es mayor que la antigua, cogeré todos sus capítulos
+                            if (seasonKey > serie.lastSeason) {
+                                newSeason = true;
+                                // Reseteo el último capi ya que hay temp nueva y tengo que pillar todo de ella.
+                                lastChapterReal = 0;
+                            }
 
                             //Si están en la temporada última que he descargado o más avanzado sigo
                             if (seasonKey >= serie.lastSeason) {
 
                                 //Recorro los capitulos de la sesión
                                 season.forEach(function (thisChapter) {
-                                    if (thisChapter.chapter > serie.lastChapter) {
+                                    // Si es capítulo más reciente de esta temporada, o es una temp nueva
+                                    if ((thisChapter.chapter > serie.lastChapter) || newSeason) {
                                         //Lo añado a la lista de descargas
                                         newTorrents.push({
                                             id: thisChapter._id,

@@ -1,7 +1,7 @@
 {
     "name": "T-Rex",
     "short_name": "T-Rex",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "manifest_version": 2,
     "description": "The byte predator, feared all around the universe.",
     "icons": {
