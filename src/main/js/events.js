@@ -2,6 +2,7 @@
 
 //Logger
 var DEBUG_MODE = false, version = '2.1.1';
+
 function logger(msg) {
     if (DEBUG_MODE) {
         console.log(msg);
@@ -22,9 +23,9 @@ var constantes = {
         //urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
         //urlSearch: 'http://trex-lovehinaesp.rhcloud.com/api/trex/search',
         //urlDownloadTorrent: 'http://trex-lovehinaesp.rhcloud.com/api/trex/download'
-        urlGetSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/serie',
-        urlAddSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/addSerie',
-        urlDownloadTorrent: 'http://trex2-crystaltales.rhcloud.com/api/trex/download'
+        urlGetSerie: 'http://trex.ligreman.com/api/trex/serie',
+        urlAddSerie: 'http://trex.ligreman.com/api/trex/addSerie',
+        urlDownloadTorrent: 'http://trex.ligreman.com/api/trex/download'
         //urlSeries: 'http://localhost/api/trex/series',
         //urlSearch: 'http://localhost/api/trex/search',
         //urlDownloadTorrent: 'http://localhost/api/trex/download'

@@ -1,6 +1,6 @@
 "use strict";
 //ID google store: ccjildcogcgklkpedpomlbghfbikmeaa
-var actualVersion = '2.2.1';
+var actualVersion = '2.2.2';
 
 //Obtengo el localStorage
 var datosSeries = localStorage.getItem('series'),

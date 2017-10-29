@@ -1,7 +1,7 @@
 {
     "name": "T-Rex",
     "short_name": "T-Rex",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "manifest_version": 2,
     "description": "The byte predator, feared all around the universe.",
     "icons": {
@@ -32,6 +32,8 @@
         "alarms",
         "notifications",
         "tabs",
-        "http://trex2-crystaltales.rhcloud.com/api/trex/*"
+        "http://trex2-crystaltales.rhcloud.com/api/trex/*",
+        "http://trex-server-trex.7e14.starter-us-west-2.openshiftapps.com/api/trex/*",
+        "http://trex.ligreman.com/api/trex/*"
     ]
 }

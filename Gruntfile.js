@@ -35,13 +35,13 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
-            sass: {
-                files: ['<%= config.app %>/sass/{,*/}*.scss'],
+            /*sass: {
+                files: ['<%= config.app %>/sass/{,*!/}*.scss'],
                 tasks: ['sass'],
                 options: {
                     livereload: true
                 }
-            },
+            },*/
             livereload: {
                 options: {
                     livereload: '<%= connect.options.livereload %>'
@@ -151,17 +151,17 @@ module.exports = function (grunt) {
                 }
             }
         },
-
-        sass: {
-            options: {
-                sourceMap: true
-            },
-            dist: {
-                files: {
-                    '<%= config.app %>/css/materialize.css': '<%= config.app %>/sass/materialize.scss'
-                }
-            }
-        },
+        /*
+                sass: {
+                    options: {
+                        sourceMap: true
+                    },
+                    dist: {
+                        files: {
+                            '<%= config.app %>/css/materialize.css': '<%= config.app %>/sass/materialize.scss'
+                        }
+                    }
+                },*/
 
         // Reads HTML for usemin blocks to enable smart builds that automatically
         // concat, minify and revision files. Creates configurations in memory so
@@ -293,7 +293,7 @@ module.exports = function (grunt) {
     // simple build task
     grunt.registerTask('build', [
         'clean:dist',
-        'sass',
+        // 'sass',
         'copy:dist',
         'useminPrepare',
         'concat:generated',

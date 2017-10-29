@@ -203,11 +203,11 @@ appServices.service('Constants', function () {
         trex: {
             //urlSeries: 'http://trex-lovehinaesp.rhcloud.com/api/trex/series',
             //urlSearchSerie: 'http://trex-lovehinaesp.rhcloud.com/api/trex/searchserie',
-            urlSearch: 'http://trex2-crystaltales.rhcloud.com/api/trex/search',
-            urlDownloadSearchTorrent: 'http://trex2-crystaltales.rhcloud.com/api/trex/downloadTorrent',
-            urlGetSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/serie',
-            urlAddSerie: 'http://trex2-crystaltales.rhcloud.com/api/trex/addSerie',
-            urlDownloadTorrent: 'http://trex2-crystaltales.rhcloud.com/api/trex/download'
+            urlSearch: 'http://trex.ligreman.com/api/trex/search',
+            urlDownloadSearchTorrent: 'http://trex.ligreman.com/api/trex/downloadTorrent',
+            urlGetSerie: 'http://trex.ligreman.com/api/trex/serie',
+            urlAddSerie: 'http://trex.ligreman.com/api/trex/addSerie',
+            urlDownloadTorrent: 'http://trex.ligreman.com/api/trex/download'
             //urlSeries: 'http://localhost/api/trex/series',
             //urlSearchSerie: 'http://localhost/api/trex/searchserie',
             // urlSearch: 'http://localhost/api/trex/search',
